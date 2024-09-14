@@ -1,0 +1,66 @@
+version: "3.8"
+
+services:
+  traefik:
+    image: traefik:v2.10
+    labels:
+      - "app=traefik"
+    container_name: traefik
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--metrics.prometheus=true"
+      - "--metrics.prometheus.entryPoint=web"
+      - "--api.dashboard=true"
+      - "--api.insecure=true"
+    ports:
+      - "80:80"
+      - "8080:8080" # Traefik dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - web
+
+  web:
+    build:
+      context: "../../../."
+      platforms:
+        - linux/arm64/v8
+    image: ghcr.io/tuky191/sre-challenge-michal:v0.0.1
+    stop_signal: SIGINT
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.web.rule=PathPrefix(`/`)"
+      - "traefik.http.services.web.loadbalancer.server.port=5000"
+      - "app=service"
+    environment:
+      - FLASK_ENV=production
+      - FLASK_DEBUG=true
+      - FLASK_RUN_HOST=0.0.0.0
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      replicas: 3
+
+  redis:
+    labels:
+      - "app=redis"
+    image: "redis:6.2-alpine"
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+volumes:
+  redis-data:

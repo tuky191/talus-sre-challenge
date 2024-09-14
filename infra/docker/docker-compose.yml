@@ -1,0 +1,5 @@
+version: "3.8"
+include:
+  - ./core/compose.yml # Core services like Traefik, Redis, etc.
+  - ./monitoring/compose.yml # Monitoring services like Prometheus, Grafana, etc.
+  - ./logging/compose.yml # Logging services like ELK Stack
