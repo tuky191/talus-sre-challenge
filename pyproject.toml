@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "sre-challenge-michal"
+version = "0.1.0"
+description = ""
+authors = ["tuky191 <turxaala@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+flask = "^3.0.3"
+python-dotenv = "^1.0.1"
+redis = "^5.0.8"
+
+[tool.poetry.scripts]
+flask = "flask.cli:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+

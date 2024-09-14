@@ -1,4 +1,9 @@
 from flask import Flask, request, jsonify
+from dotenv import load_dotenv
+import os
+from pprint import pprint
+
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -24,6 +29,7 @@ def create_item():
 def list_items():
     return jsonify(items), 200
 
-if __name__ == '__main__':
-    app.run(debug=True)
 
+if __name__ == '__main__':
+    pprint(app.config)
+    app.run(debug=app.config['DEBUG'])
