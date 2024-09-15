@@ -86,6 +86,10 @@ resource "kubernetes_deployment" "backend_app" {
           }
 
           env {
+            name  = "FLASK_RUN_HOST"
+            value = "0.0.0.0"
+          }
+          env {
             name  = "APP_ROLE"
             value = each.value.role
           }
