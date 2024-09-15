@@ -1,28 +1,32 @@
 locals {
   node_pools = flatten([
-    for zone_id in local.params.zone_ids : [
-      {
-        name               = "${local.params.backend-pool.name}-${zone_id}"
-        machine_type       = local.params.backend-pool.scale[zone_id].machine_type
-        node_locations     = "${var.google_region}-${zone_id}"
-        initial_node_count = local.params.backend-pool.scale[zone_id].initial_node_count
-        min_count          = local.params.backend-pool.scale[zone_id].min_count
-        max_count          = local.params.backend-pool.scale[zone_id].max_count
-        local_ssd_count    = 0
-        spot               = true
-        disk_size_gb       = 50
-        disk_type          = "pd-standard"
-        image_type         = "COS_CONTAINERD"
-        enable_gcfs        = false
-        enable_gvnic       = false
-        logging_variant    = "DEFAULT"
-        auto_repair        = true
-        auto_upgrade       = true
-        preemptible        = false
-      }
-    ]
+    for pool in local.params.pools :
+    flatten([
+      for pool_name, pool_info in pool : [
+        for zone_id, scale in pool_info.scale : {
+          name               = "${pool_info.name}-${zone_id}"
+          machine_type       = scale.machine_type
+          node_locations     = "${var.google_region}-${zone_id}"
+          initial_node_count = scale.initial_node_count
+          min_count          = scale.min_count
+          max_count          = scale.max_count
+          local_ssd_count    = 0
+          spot               = true
+          disk_size_gb       = 50
+          disk_type          = "pd-standard"
+          image_type         = "COS_CONTAINERD"
+          enable_gcfs        = false
+          enable_gvnic       = false
+          logging_variant    = "DEFAULT"
+          auto_repair        = true
+          auto_upgrade       = true
+          preemptible        = false
+        }
+      ]
+    ])
   ])
 }
+
 
 module "gke" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"

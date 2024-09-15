@@ -1,28 +1,54 @@
 {
-    "backend-pool": {
-        "name": "backend-pool",
-        "scale": {
-            "b": {
-                "machine_type": "e2-micro",
-                "initial_node_count": 1,
-                "min_count": 1,
-                "max_count": 1
+    "pools": [
+        {
+            "backend-pool": {
+                "name": "backend-pool",
+                "scale": {
+                    "a": {
+                        "machine_type": "e2-micro",
+                        "initial_node_count": 1,
+                        "min_count": 1,
+                        "max_count": 1
+                    },
+                    "b": {
+                        "machine_type": "e2-micro",
+                        "initial_node_count": 1,
+                        "min_count": 1,
+                        "max_count": 1
+                    }
+                }
             },
-            "c": {
-                "machine_type": "e2-micro",
-                "initial_node_count": 1,
-                "min_count": 1,
-                "max_count": 1
+            "monitoring-pool": {
+                "name": "monitoring-pool",
+                "scale": {
+                    "a": {
+                        "machine_type": "e2-micro",
+                        "initial_node_count": 1,
+                        "min_count": 1,
+                        "max_count": 1
+                    }
+                }
+            },
+            "data-pool": {
+                "name": "data-pool",
+                "scale": {
+                    "a": {
+                        "machine_type": "e2-micro",
+                        "initial_node_count": 1,
+                        "min_count": 1,
+                        "max_count": 1
+                    }
+                }
             }
         }
-    },
-    "zone_ids": [
-        "b",
-        "c"
     ],
     "ranges": {
         "subnetwork": "10.0.0.0/20",
         "pods": "10.0.16.0/20",
         "services": "10.0.32.0/20"
-    }
+    },
+    "zone_ids": [
+        "a",
+        "b"
+    ]
 }
