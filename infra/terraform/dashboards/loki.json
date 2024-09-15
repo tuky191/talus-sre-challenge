@@ -132,7 +132,7 @@
                         "uid": "bdy01v55u6800f"
                     },
                     "editorMode": "code",
-                    "expr": "sum(count_over_time({app=\"$app\"} |= \"$search\" [$__interval]))",
+                    "expr": "sum(count_over_time({container=\"$app\"} |= \"$search\" [$__interval]))",
                     "queryType": "range",
                     "refId": "A"
                 }
@@ -169,7 +169,7 @@
                         "uid": "bdy01v55u6800f"
                     },
                     "editorMode": "code",
-                    "expr": "{app=\"$app\"} |= \"$search\" | logfmt ",
+                    "expr": "{container=\"$app\"} |= \"$search\" | logfmt ",
                     "queryType": "range",
                     "refId": "A"
                 }
@@ -185,9 +185,9 @@
         "list": [
             {
                 "current": {
-                    "selected": false,
-                    "text": "alertmanager",
-                    "value": "alertmanager"
+                    "selected": true,
+                    "text": "flask-app",
+                    "value": "flask-app"
                 },
                 "datasource": {
                     "type": "loki",
@@ -255,6 +255,6 @@
     "timezone": "",
     "title": "Logs / App",
     "uid": "sadlil-loki-apps-dashboard",
-    "version": 1,
+    "version": 2,
     "weekStart": ""
 }
