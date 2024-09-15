@@ -100,7 +100,14 @@ resource "helm_release" "loki_stack" {
     name  = "loki.persistence.enabled"
     value = "true"
   }
-
+  set {
+    name  = "loki.serviceMonitor.enabled"
+    value = "true"
+  }
+  set {
+    name  = "loki.image.tag"
+    value = "2.9.3"
+  }
   set {
     name  = "loki.persistence.size"
     value = "10Gi"
@@ -123,6 +130,11 @@ resource "helm_release" "loki_stack" {
 
   set {
     name  = "promtail.enabled"
+    value = "true"
+  }
+
+  set {
+    name  = "promtail.serviceMonitor.enabled"
     value = "true"
   }
 
