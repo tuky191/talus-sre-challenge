@@ -55,18 +55,8 @@ resource "kubernetes_deployment" "backend_app" {
       }
 
       spec {
-        affinity {
-          node_affinity {
-            required_during_scheduling_ignored_during_execution {
-              node_selector_term {
-                match_expressions {
-                  key      = "topology.kubernetes.io/zone"
-                  operator = "In"
-                  values   = ["${var.google_region}-${each.value.zone}"]
-                }
-              }
-            }
-          }
+        node_selector = {
+          "cloud.google.com/gke-nodepool" = join("-", ["backend-pool", each.value.zone])
         }
         image_pull_secrets {
           name = kubernetes_secret.ghcr_image_pull_secret.metadata[0].name
