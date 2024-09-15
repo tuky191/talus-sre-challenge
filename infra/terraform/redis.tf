@@ -79,19 +79,4 @@ resource "kubernetes_stateful_set" "redis" {
     }
   }
 }
-resource "kubernetes_persistent_volume_claim" "redis_data_pvc" {
-  metadata {
-    name      = "redis-data-pvc"
-    namespace = kubernetes_namespace.data_namespace.metadata[0].name
-  }
 
-  spec {
-    access_modes = ["ReadWriteOnce"]
-
-    resources {
-      requests = {
-        storage = "1Gi"
-      }
-    }
-  }
-}
