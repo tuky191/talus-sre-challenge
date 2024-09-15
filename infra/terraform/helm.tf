@@ -89,36 +89,60 @@ data "kubernetes_service" "kube-prometheus-stack" {
   }
 }
 
-resource "helm_release" "promtail" {
-  name       = "promtail"
+resource "helm_release" "loki_stack" {
+  name       = "loki-stack"
   namespace  = kubernetes_namespace.monitoring_namespace.metadata[0].name
-  chart      = "promtail"
+  chart      = "loki-stack"
   repository = "https://grafana.github.io/helm-charts"
+  version    = "2.10.1"
 
   set {
-    name  = "config.clients[0].url"
-    value = "http://loki.monitoring.svc.cluster.local:3100/loki/api/v1/push"
-  }
-
-  set {
-    name  = "config.positions"
-    value = "/data/positions.yaml"
-  }
-
-  set {
-    name  = "persistence.enabled"
+    name  = "loki.persistence.enabled"
     value = "true"
   }
 
   set {
-    name  = "persistence.size"
+    name  = "loki.persistence.size"
     value = "10Gi"
   }
 
   set {
-    name  = "persistence.storageClassName"
+    name  = "loki.persistence.storageClassName"
+    value = "standard-rwo"
+  }
+
+  set {
+    name  = "loki.config.table_manager.retention_deletes_enabled"
+    value = "true"
+  }
+
+  set {
+    name  = "loki.config.table_manager.retention_period"
+    value = "168h"
+  }
+
+  set {
+    name  = "promtail.enabled"
+    value = "true"
+  }
+
+  set {
+    name  = "promtail.persistence.enabled"
+    value = "true"
+  }
+
+  set {
+    name  = "promtail.persistence.size"
+    value = "10Gi"
+  }
+
+  set {
+    name  = "promtail.persistence.storageClassName"
     value = "standard-rwo"
   }
 
   create_namespace = false
+  depends_on = [
+    helm_release.kube_prometheus_stack
+  ]
 }
