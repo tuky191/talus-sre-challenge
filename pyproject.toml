@@ -10,6 +10,7 @@ python = "^3.9"
 flask = "^3.0.3"
 python-dotenv = "^1.0.1"
 redis = "^5.0.8"
+gunicorn = "^23.0.0"
 
 [tool.poetry.scripts]
 flask = "flask.cli:main"

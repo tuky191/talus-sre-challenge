@@ -4,13 +4,12 @@ import os
 from pprint import pprint
 import redis
 import json
+from redis.exceptions import ConnectionError
+
 load_dotenv()
 
 app = Flask(__name__)
 
-
-app.config['DEBUG'] = os.getenv('DEBUG', 'True') == 'True'
-app.config['FLASK_ENV'] = os.getenv('FLASK_ENV', 'production')
 app.config['REDIS_HOST'] = os.getenv('REDIS_HOST', 'localhost')
 app.config['REDIS_PORT'] = int(os.getenv('REDIS_PORT', '6379'))
 app.config['REDIS_DB'] = int(os.getenv('REDIS_DB', '0'))
@@ -53,6 +52,15 @@ def list_items():
         items.append(item)
     return jsonify(items), 200
 
+# GET /health - Check if Redis is available
+@app.route('/health', methods=['GET'])
+def health_check():
+    try:
+        # Check Redis connection
+        redis_client.ping()
+        return jsonify({'status': 'healthy'}), 200
+    except ConnectionError:
+        return jsonify({'status': 'unhealthy'}), 500
+
 if __name__ == '__main__':
     pprint(app.config)
-    app.run(debug=app.config['DEBUG'])

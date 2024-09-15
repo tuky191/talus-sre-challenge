@@ -35,9 +35,6 @@ services:
       - "traefik.http.services.web.loadbalancer.server.port=5000"
       - "app=service"
     environment:
-      - FLASK_ENV=production
-      - FLASK_DEBUG=true
-      - FLASK_RUN_HOST=0.0.0.0
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     logging:

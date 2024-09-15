@@ -46,10 +46,8 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 # Copy application files
 COPY --from=builder /app .
 
-# Expose the port Flask listens on
+# Expose the port your application listens on
 EXPOSE 5000
 
-# Set environment variables for Flask
-ENV FLASK_APP=app.py
-# Run the application
-CMD ["flask", "run"]
+# Run the application with Gunicorn on port 5000
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app:app", "--log-level", "debug"] 
