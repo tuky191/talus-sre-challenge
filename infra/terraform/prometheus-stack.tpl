@@ -16,10 +16,10 @@ grafana:
   persistence:
     enabled: true
     type: sts
-    storageClassName: "standard"
+    storageClassName: "standard-rwo"
     accessModes:
       - ReadWriteOnce
-    size: 20Gi
+    size: 10Gi
     finalizers:
       - kubernetes.io/pvc-protection
   ingress:
@@ -56,11 +56,11 @@ prometheus:
     storageSpec:
       volumeClaimTemplate:
         spec:
-          storageClassName: "standard"
+          storageClassName: "standard-rwo"
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:
-              storage: 128Gi
+              storage: 10Gi
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
