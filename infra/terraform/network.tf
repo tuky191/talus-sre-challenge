@@ -56,7 +56,7 @@ resource "google_compute_router_nat" "nat" {
 # resource "kubernetes_ingress_v1" "ingress_rest" {
 #   metadata {
 #     name      = "ingress-rest"
-#     namespace = kubernetes_namespace.chains_namespace.metadata[0].name
+#     namespace = kubernetes_namespace.backend_namespace.metadata[0].name
 #     annotations = {
 #       "kubernetes.io/ingress.class"                       = "nginx",
 #       "nginx.ingress.kubernetes.io/configuration-snippet" = "internal;\nrewrite ^ $original_uri break;",

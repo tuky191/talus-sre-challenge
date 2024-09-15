@@ -35,9 +35,9 @@ resource "google_project_iam_member" "cluster_service_account-artifact-registry"
   member  = "serviceAccount:${google_service_account.default.email}"
 }
 
-resource "google_service_account" "lcd_sa" {
-  account_id   = "${var.google_project}-lcd-sa"
-  display_name = "${var.google_project}-lcd-sa"
+resource "google_service_account" "backend_sa" {
+  account_id   = "${var.google_project}-backend-sa"
+  display_name = "${var.google_project}-backend-sa"
 }
 
 resource "google_project_iam_binding" "storage_object_user" {
@@ -45,7 +45,7 @@ resource "google_project_iam_binding" "storage_object_user" {
   role    = "roles/storage.objectUser"
 
   members = [
-    "serviceAccount:${google_service_account.lcd_sa.email}"
+    "serviceAccount:${google_service_account.backend_sa.email}"
   ]
 }
 
@@ -54,16 +54,16 @@ resource "google_project_iam_binding" "workload_identity_user" {
   role    = "roles/iam.workloadIdentityUser"
 
   members = [
-    "serviceAccount:${var.google_project}.svc.id.goog[chains/lcd-service-account]"
+    "serviceAccount:${var.google_project}.svc.id.goog[backend/backend-service-account]"
   ]
 }
 
-resource "kubernetes_service_account" "lcd_sa" {
+resource "kubernetes_service_account" "backend_sa" {
   metadata {
-    name      = "lcd-service-account"
-    namespace = "chains"
+    name      = "backend-service-account"
+    namespace = "backend"
     annotations = {
-      "iam.gke.io/gcp-service-account" = google_service_account.lcd_sa.email
+      "iam.gke.io/gcp-service-account" = google_service_account.backend_sa.email
     }
   }
 }
