@@ -56,7 +56,7 @@ resource "kubernetes_stateful_set" "redis" {
         volume {
           name = "redis-data"
           persistent_volume_claim {
-            claim_name = kubernetes_persistent_volume_claim.redis_data_pvc.metadata[0].name
+            claim_name = "redis-data"
           }
         }
       }
@@ -75,6 +75,7 @@ resource "kubernetes_stateful_set" "redis" {
             storage = "1Gi"
           }
         }
+        storage_class_name = "standard-rwo"
       }
     }
   }
