@@ -19,3 +19,14 @@ resource "kubernetes_namespace" "monitoring_namespace" {
     }
   }
 }
+
+resource "kubernetes_namespace" "data_namespace" {
+  metadata {
+    name = "data"
+    labels = {
+      "app.kubernetes.io/name"       = "data"
+      "app.kubernetes.io/part-of"    = "data"
+      "app.kubernetes.io/managed-by" = local.terraform_source
+    }
+  }
+}

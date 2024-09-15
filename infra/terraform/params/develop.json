@@ -1,4 +1,10 @@
 {
+    "backend": {
+        "replicas": {
+            "read": 3,
+            "write": 3
+        }
+    },
     "pools": [
         {
             "backend-pool": {

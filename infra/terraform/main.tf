@@ -58,5 +58,9 @@ locals {
   zones            = [for zone_id in local.params.zone_ids : "${var.google_region}-${zone_id}"]
   terraform_source = "tf-infra-interview"
   ranges           = local.params.ranges
-  repository_url   = "ghcr.io/tuky191/talus-sre-challenge:0.0.1"
+  repository_url   = "ghcr.io/tuky191/talus-sre-challenge"
+  backend_image = join(":", [
+    local.repository_url,
+    "latest",
+  ])
 }
