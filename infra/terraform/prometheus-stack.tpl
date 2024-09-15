@@ -12,6 +12,17 @@ prometheus-node-exporter:
                 values:
                   - "monitoring-pool-a"
 
+loki:
+  enabled: true
+  persistence:
+    enabled: true
+    size: 10Gi
+    storageClassName: "standard-rwo"
+  config:
+    table_manager:
+      retention_deletes_enabled: true
+      retention_period: 168h # Retain logs for 7 days
+
 grafana:
   persistence:
     enabled: true

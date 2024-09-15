@@ -88,3 +88,37 @@ data "kubernetes_service" "kube-prometheus-stack" {
     name = "kube-prometheus-stack"
   }
 }
+
+resource "helm_release" "promtail" {
+  name       = "promtail"
+  namespace  = kubernetes_namespace.monitoring_namespace.metadata[0].name
+  chart      = "promtail"
+  repository = "https://grafana.github.io/helm-charts"
+
+  set {
+    name  = "config.clients[0].url"
+    value = "http://loki.monitoring.svc.cluster.local:3100/loki/api/v1/push"
+  }
+
+  set {
+    name  = "config.positions"
+    value = "/data/positions.yaml"
+  }
+
+  set {
+    name  = "persistence.enabled"
+    value = "true"
+  }
+
+  set {
+    name  = "persistence.size"
+    value = "10Gi"
+  }
+
+  set {
+    name  = "persistence.storageClassName"
+    value = "standard-rwo"
+  }
+
+  create_namespace = false
+}
