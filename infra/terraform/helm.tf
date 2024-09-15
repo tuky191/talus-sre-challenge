@@ -41,3 +41,22 @@ resource "helm_release" "nginx_ingress" {
     google_compute_address.this
   ]
 }
+
+
+resource "helm_release" "kube-prometheus-stack" {
+  name       = "kube-prometheus-stack"
+  repository = "https://prometheus-community.github.io/helm-charts"
+  chart      = "kube-prometheus-stack"
+  version    = "57.1.1"
+
+  values = [templatefile("${path.module}/prometheus-stack.tpl", {
+    grafana_host = "grafana.talus-challenge.uk"
+  })]
+}
+
+data "kubernetes_service" "kube-prometheus-stack" {
+  depends_on = [helm_release.kube-prometheus-stack]
+  metadata {
+    name = "kube-prometheus-stack"
+  }
+}
