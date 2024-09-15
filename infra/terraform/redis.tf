@@ -1,4 +1,4 @@
-resource "kubernetes_deployment" "redis" {
+resource "kubernetes_stateful_set" "redis" {
   metadata {
     name      = "redis"
     namespace = kubernetes_namespace.data_namespace.metadata[0].name
@@ -8,7 +8,8 @@ resource "kubernetes_deployment" "redis" {
   }
 
   spec {
-    replicas = 1
+    service_name = kubernetes_service.redis_service.metadata[0].name
+    replicas     = 1
 
     selector {
       match_labels = {
@@ -39,6 +40,7 @@ resource "kubernetes_deployment" "redis" {
             name       = "redis-data"
             mount_path = "/data"
           }
+
           resources {
             limits = {
               memory = "256Mi"
@@ -49,7 +51,6 @@ resource "kubernetes_deployment" "redis" {
               cpu    = "250m"
             }
           }
-
         }
 
         volume {
@@ -60,9 +61,24 @@ resource "kubernetes_deployment" "redis" {
         }
       }
     }
+
+    volume_claim_template {
+      metadata {
+        name = "redis-data"
+      }
+
+      spec {
+        access_modes = ["ReadWriteOnce"]
+
+        resources {
+          requests = {
+            storage = "1Gi"
+          }
+        }
+      }
+    }
   }
 }
-
 resource "kubernetes_persistent_volume_claim" "redis_data_pvc" {
   metadata {
     name      = "redis-data-pvc"
