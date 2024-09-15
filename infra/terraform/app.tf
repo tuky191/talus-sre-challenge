@@ -1,4 +1,3 @@
-# Step 1: Filter zones that have nodes deployed (i.e., initial_node_count > 0)
 locals {
   valid_zones = {
     for zone_id, scale in local.params.pools[0]["backend-pool"].scale : zone_id => scale
@@ -6,7 +5,6 @@ locals {
   }
 }
 
-# Step 2: Define roles (read/write) for each valid zone
 locals {
   deployment_roles = flatten([
     for zone_id in keys(local.valid_zones) : [
@@ -69,6 +67,9 @@ resource "kubernetes_deployment" "backend_app" {
               }
             }
           }
+        }
+        image_pull_secrets {
+          name = kubernetes_secret.ghcr_image_pull_secret.metadata[0].name
         }
 
         container {
