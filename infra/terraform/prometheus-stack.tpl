@@ -2,13 +2,21 @@ prometheus-node-exporter:
   tolerations:
     - key: "node-role.kubernetes.io/master"
       effect: "NoSchedule"
-  affinity: {} # Empty affinity to ensure node-exporter runs on all nodes
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: "cloud.google.com/gke-nodepool"
+                operator: In
+                values:
+                  - "monitoring-pool-a"
 
 grafana:
   persistence:
     enabled: true
     type: sts
-    storageClassName: "standard" # GKE's default storage class
+    storageClassName: "standard"
     accessModes:
       - ReadWriteOnce
     size: 20Gi
@@ -23,9 +31,19 @@ grafana:
       nginx.ingress.kubernetes.io/proxy-body-size: "50m"
       nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
       nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
-      nginx.ingress.kubernetes.io/ssl-redirect: "false" # Disable SSL redirection as SSL is terminated at Cloudflare
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTP" # Use HTTP for backend communication with Grafana
-    # No TLS section needed since Cloudflare will handle SSL termination
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    # No TLS required as Cloudflare will handle SSL termination
+
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: "cloud.google.com/gke-nodepool"
+                operator: In
+                values:
+                  - "monitoring-pool-a"
 
   sidecar:
     alerts:
@@ -38,11 +56,20 @@ prometheus:
     storageSpec:
       volumeClaimTemplate:
         spec:
-          storageClassName: "standard" # GKE's default storage class
+          storageClassName: "standard"
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:
               storage: 128Gi
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: "cloud.google.com/gke-nodepool"
+                  operator: In
+                  values:
+                    - "monitoring-pool-a"
     additionalScrapeConfigs:
       - job_name: "backend"
         kubernetes_sd_configs:
