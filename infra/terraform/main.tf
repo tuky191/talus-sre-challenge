@@ -26,6 +26,13 @@ provider "google" {
 }
 
 provider "google-beta" {
+  credentials = var.google_credentials
+  project     = var.google_project
+  region      = var.google_region
+  default_labels = {
+    terraform   = local.terraform_source
+    environment = var.env
+  }
 }
 
 

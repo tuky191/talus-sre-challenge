@@ -13,7 +13,7 @@ variable "google_project" {
 variable "google_region" {
   type        = string
   description = "The Google Cloud Platform region where the resources will be deployed."
-  default     = "europe-west1"
+  default     = "us-east5"
 }
 
 variable "env" {
