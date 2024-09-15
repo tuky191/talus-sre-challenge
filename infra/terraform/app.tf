@@ -80,14 +80,26 @@ resource "kubernetes_deployment" "backend_app" {
             container_port = 5000
           }
 
-          env {
-            name  = "FLASK_ENV"
-            value = "production"
+          liveness_probe {
+            http_get {
+              path = "/health"
+              port = 5000
+            }
+            initial_delay_seconds = 5
+            period_seconds        = 10
+            timeout_seconds       = 5
+            failure_threshold     = 3
           }
 
-          env {
-            name  = "FLASK_RUN_HOST"
-            value = "0.0.0.0"
+          readiness_probe {
+            http_get {
+              path = "/health"
+              port = 5000
+            }
+            initial_delay_seconds = 5
+            period_seconds        = 10
+            timeout_seconds       = 5
+            failure_threshold     = 3
           }
           env {
             name  = "APP_ROLE"
