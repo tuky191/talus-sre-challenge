@@ -36,6 +36,25 @@ resource "helm_release" "nginx_ingress" {
     name  = "controller.admissionWebhooks.patch.enabled"
     value = "false"
   }
+  set {
+    name  = "controller.metrics.enabled"
+    value = "true"
+  }
+  set {
+    name  = "controller.metrics.service.annotations.prometheus\\.io/scrape"
+    value = "true"
+  }
+
+  set {
+    name  = "controller.metrics.service.annotations.prometheus\\.io/port"
+    value = "10254"
+  }
+
+  set {
+    name  = "controller.metrics.service.annotations.prometheus\\.io/path"
+    value = "/metrics"
+  }
+
   create_namespace = true
   depends_on = [
     google_compute_address.this

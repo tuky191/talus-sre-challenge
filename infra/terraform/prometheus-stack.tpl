@@ -71,21 +71,17 @@ prometheus:
                   values:
                     - "monitoring-pool-a"
     additionalScrapeConfigs:
-      - job_name: "backend"
+      - job_name: "nginx-ingress"
+        metrics_path: /metrics
         kubernetes_sd_configs:
           - role: pod
         relabel_configs:
+          - source_labels: [__meta_kubernetes_service_name]
+            action: keep
+            regex: nginx-ingress-controller
           - source_labels: [__meta_kubernetes_namespace]
             action: keep
-            regex: backend
+            regex: ingress-nginx
           - source_labels: [__meta_kubernetes_pod_container_port_number]
             action: keep
-            regex: "5000"
-          - action: labelmap
-            regex: __meta_kubernetes_pod_label_(.+)
-          - source_labels: [__meta_kubernetes_namespace]
-            action: replace
-            target_label: namespace
-          - source_labels: [__meta_kubernetes_pod_name]
-            action: replace
-            target_label: pod_name
+            regex: "10254"
