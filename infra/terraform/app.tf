@@ -96,7 +96,7 @@ resource "kubernetes_deployment" "backend_app" {
 
           env {
             name  = "REDIS_HOST"
-            value = "redis.data.svc.cluster.local" # Update as needed
+            value = "redis.data.svc.cluster.local"
           }
         }
       }

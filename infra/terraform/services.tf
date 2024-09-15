@@ -1,37 +1,61 @@
+resource "kubernetes_service" "discover_backend_read" {
+  metadata {
+    name      = "discover-backend-read"
+    namespace = kubernetes_namespace.backend_namespace.metadata[0].name
+    labels = {
+      "app.kubernetes.io/name"       = "discover-backend-read"
+      "app.kubernetes.io/part-of"    = kubernetes_namespace.backend_namespace.metadata[0].name
+      "app.kubernetes.io/managed-by" = local.terraform_source
+    }
+  }
 
-# resource "kubernetes_service" "discovery_service" {
-#   for_each = { for k, v in local.aggregatedServices : k => v }
+  spec {
+    selector = {
+      "app" = "backend-app-read" # Must match the labels used in your backend-app-read deployment
+    }
 
-#   metadata {
-#     name      = "discover-${each.value.chain_name}-${each.value.node_type}"
-#     namespace = kubernetes_namespace.chains_namespace.metadata[0].name
-#     labels = {
-#       "app.kubernetes.io/name"       = "discover-${each.value.chain_name}-${each.value.node_type}"
-#       "app.kubernetes.io/part-of"    = kubernetes_namespace.chains_namespace.metadata[0].name
-#       "app.kubernetes.io/managed-by" = local.terraform_source
-#     }
-#   }
+    type = "ClusterIP"
 
-#   spec {
-#     selector = {
-#       "chain-type" = "${each.value.chain_name}-${each.value.node_type}"
-#     }
+    port {
+      name        = "http"
+      port        = 5000
+      target_port = 5000
+      protocol    = "TCP"
+    }
+  }
 
-#     type       = "ClusterIP"
-#     cluster_ip = "None"
+  depends_on = [
+    kubernetes_namespace.backend_namespace
+  ]
+}
 
-#     dynamic "port" {
-#       for_each = [for port in local.port_order : each.value.port_mappings[port]]
-#       content {
-#         name        = port.value.name
-#         port        = port.value.containerPort
-#         target_port = port.value.containerPort
-#         protocol    = port.value.protocol
-#       }
-#     }
-#   }
+resource "kubernetes_service" "discover_backend_write" {
+  metadata {
+    name      = "discover-backend-write"
+    namespace = kubernetes_namespace.backend_namespace.metadata[0].name
+    labels = {
+      "app.kubernetes.io/name"       = "discover-backend-write"
+      "app.kubernetes.io/part-of"    = kubernetes_namespace.backend_namespace.metadata[0].name
+      "app.kubernetes.io/managed-by" = local.terraform_source
+    }
+  }
 
-#   depends_on = [
-#     module.gke.google_container_node_pool, kubernetes_namespace.chains_namespace
-#   ]
-# }
+  spec {
+    selector = {
+      "app" = "backend-app-write" # Must match the labels used in your backend-app-write deployment
+    }
+
+    type = "ClusterIP"
+
+    port {
+      name        = "http"
+      port        = 5000
+      target_port = 5000
+      protocol    = "TCP"
+    }
+  }
+
+  depends_on = [
+    kubernetes_namespace.backend_namespace
+  ]
+}
