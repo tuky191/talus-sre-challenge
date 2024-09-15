@@ -143,6 +143,6 @@ resource "helm_release" "loki_stack" {
 
   create_namespace = false
   depends_on = [
-    helm_release.kube_prometheus_stack
+    helm_release.kube-prometheus-stack
   ]
 }
