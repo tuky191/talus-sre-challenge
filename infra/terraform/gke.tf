@@ -4,7 +4,7 @@ locals {
     flatten([
       for pool_name, pool_info in pool : [
         for zone_id, scale in pool_info.scale : {
-          name               = "${pool_info.name}-${zone_id}"
+          name               = "${pool_name}-${zone_id}"
           machine_type       = scale.machine_type
           node_locations     = "${var.google_region}-${zone_id}"
           initial_node_count = scale.initial_node_count

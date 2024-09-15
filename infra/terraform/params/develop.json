@@ -2,7 +2,6 @@
     "pools": [
         {
             "backend-pool": {
-                "name": "backend-pool",
                 "scale": {
                     "a": {
                         "machine_type": "e2-micro",
@@ -19,7 +18,6 @@
                 }
             },
             "monitoring-pool": {
-                "name": "monitoring-pool",
                 "scale": {
                     "a": {
                         "machine_type": "e2-micro",
@@ -30,7 +28,6 @@
                 }
             },
             "data-pool": {
-                "name": "data-pool",
                 "scale": {
                     "a": {
                         "machine_type": "e2-micro",
