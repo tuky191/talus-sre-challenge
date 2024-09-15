@@ -8,7 +8,7 @@ resource "kubernetes_deployment" "redis" {
   }
 
   spec {
-    replicas = 1 # Change this to scale Redis if needed
+    replicas = 1
 
     selector {
       match_labels = {
@@ -24,36 +24,38 @@ resource "kubernetes_deployment" "redis" {
       }
 
       spec {
-        container { # Singular is correct for Terraform
+        node_selector = {
+          "cloud.google.com/gke-nodepool" = join("-", ["data-pool", "a"])
+        }
+        container {
           name  = "redis"
           image = "redis:6.2-alpine"
 
-          port { # Singular is correct for Terraform
+          port {
             container_port = 6379
           }
 
-          volume_mount { # Singular is correct for Terraform
+          volume_mount {
             name       = "redis-data"
             mount_path = "/data"
           }
           resources {
             limits = {
-              memory = "256Mi" # Limits for memory and CPU
+              memory = "256Mi"
               cpu    = "500m"
             }
             requests = {
-              memory = "128Mi" # Requests for memory and CPU
+              memory = "128Mi"
               cpu    = "250m"
             }
           }
 
         }
 
-        # Volumes configuration
-        volume { # Singular is correct for Terraform
+        volume {
           name = "redis-data"
           persistent_volume_claim {
-            claim_name = kubernetes_persistent_volume_claim.redis_data_pvc.metadata[0].name # Corrected indexing
+            claim_name = kubernetes_persistent_volume_claim.redis_data_pvc.metadata[0].name
           }
         }
       }
