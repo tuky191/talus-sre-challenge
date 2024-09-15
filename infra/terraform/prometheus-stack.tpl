@@ -70,18 +70,3 @@ prometheus:
                   operator: In
                   values:
                     - "monitoring-pool-a"
-    additionalScrapeConfigs:
-      - job_name: "nginx-ingress"
-        metrics_path: /metrics
-        kubernetes_sd_configs:
-          - role: pod
-        relabel_configs:
-          - source_labels: [__meta_kubernetes_service_name]
-            action: keep
-            regex: nginx-ingress-controller
-          - source_labels: [__meta_kubernetes_namespace]
-            action: keep
-            regex: ingress-nginx
-          - source_labels: [__meta_kubernetes_pod_container_port_number]
-            action: keep
-            regex: "10254"
