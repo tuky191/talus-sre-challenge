@@ -21,7 +21,6 @@
     "fiscalYearStartMonth": 0,
     "gnetId": 13639,
     "graphTooltip": 0,
-    "id": 2,
     "links": [
         {
             "$$hashKey": "object:59",
@@ -47,9 +46,8 @@
     "panels": [
         {
             "datasource": {
-                "default": false,
                 "type": "loki",
-                "uid": "P8E80F9AEF21F6940"
+                "uid": "bdy01v55u6800f"
             },
             "fieldConfig": {
                 "defaults": {
@@ -63,7 +61,6 @@
                         "axisLabel": "",
                         "axisPlacement": "hidden",
                         "barAlignment": 0,
-                        "barWidthFactor": 0.6,
                         "drawStyle": "bars",
                         "fillOpacity": 100,
                         "gradientMode": "none",
@@ -132,11 +129,10 @@
                 {
                     "datasource": {
                         "type": "loki",
-                        "uid": "P8E80F9AEF21F6940"
+                        "uid": "bdy01v55u6800f"
                     },
                     "editorMode": "code",
                     "expr": "sum(count_over_time({app=\"$app\"} |= \"$search\" [$__interval]))",
-                    "legendFormat": "",
                     "queryType": "range",
                     "refId": "A"
                 }
@@ -145,9 +141,8 @@
         },
         {
             "datasource": {
-                "default": false,
                 "type": "loki",
-                "uid": "P8E80F9AEF21F6940"
+                "uid": "bdy01v55u6800f"
             },
             "gridPos": {
                 "h": 25,
@@ -171,12 +166,10 @@
                 {
                     "datasource": {
                         "type": "loki",
-                        "uid": "P8E80F9AEF21F6940"
+                        "uid": "bdy01v55u6800f"
                     },
                     "editorMode": "code",
-                    "expr": "{app=\"$app\"} |= \"$search\" | logfmt",
-                    "hide": false,
-                    "legendFormat": "",
+                    "expr": "{app=\"$app\"} |= \"$search\" | logfmt ",
                     "queryType": "range",
                     "refId": "A"
                 }
@@ -192,13 +185,13 @@
         "list": [
             {
                 "current": {
-                    "selected": true,
-                    "text": "grafana",
-                    "value": "grafana"
+                    "selected": false,
+                    "text": "alertmanager",
+                    "value": "alertmanager"
                 },
                 "datasource": {
                     "type": "loki",
-                    "uid": "P8E80F9AEF21F6940"
+                    "uid": "bdy01v55u6800f"
                 },
                 "definition": "",
                 "hide": 0,
@@ -208,7 +201,7 @@
                 "name": "app",
                 "options": [],
                 "query": {
-                    "label": "app",
+                    "label": "container",
                     "refId": "LokiVariableQueryEditor-VariableQuery",
                     "stream": "",
                     "type": 1
@@ -217,16 +210,13 @@
                 "regex": "",
                 "skipUrlSync": false,
                 "sort": 0,
-                "tagValuesQuery": "",
-                "tagsQuery": "",
-                "type": "query",
-                "useTags": false
+                "type": "query"
             },
             {
                 "current": {
                     "selected": false,
-                    "text": "*",
-                    "value": "*"
+                    "text": "",
+                    "value": ""
                 },
                 "hide": 0,
                 "label": "String Match",
@@ -234,11 +224,11 @@
                 "options": [
                     {
                         "selected": true,
-                        "text": "*",
-                        "value": "*"
+                        "text": "",
+                        "value": ""
                     }
                 ],
-                "query": "*",
+                "query": "",
                 "skipUrlSync": false,
                 "type": "textbox"
             }
@@ -265,6 +255,6 @@
     "timezone": "",
     "title": "Logs / App",
     "uid": "sadlil-loki-apps-dashboard",
-    "version": 3,
+    "version": 1,
     "weekStart": ""
 }
