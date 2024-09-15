@@ -1,0 +1,28 @@
+{
+    "lcd-pool": {
+        "name": "placeholder",
+        "scale": {
+            "b": {
+                "machine_type": "e2-highmem-4",
+                "initial_node_count": 1,
+                "min_count": 1,
+                "max_count": 1
+            },
+            "c": {
+                "machine_type": "e2-highmem-4",
+                "initial_node_count": 1,
+                "min_count": 1,
+                "max_count": 1
+            }
+        }
+    },
+    "zone_ids": [
+        "b",
+        "c"
+    ],
+    "ranges": {
+        "subnetwork": "10.0.0.0/20",
+        "pods": "10.0.16.0/20",
+        "services": "10.0.32.0/20"
+    }
+}
