@@ -1,15 +1,15 @@
 {
-    "lcd-pool": {
-        "name": "placeholder",
+    "backend-pool": {
+        "name": "backend-pool",
         "scale": {
             "b": {
-                "machine_type": "e2-highmem-4",
+                "machine_type": "e2-micro",
                 "initial_node_count": 1,
                 "min_count": 1,
                 "max_count": 1
             },
             "c": {
-                "machine_type": "e2-highmem-4",
+                "machine_type": "e2-micro",
                 "initial_node_count": 1,
                 "min_count": 1,
                 "max_count": 1
