@@ -44,23 +44,6 @@ provider "google-beta" {
 # }
 
 
-resource "google_compute_instance" "default" {
-  name         = "vm-instance"
-  machine_type = "f1-micro"
-  zone         = "us-central1-a"
-
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-12"
-    }
-  }
-
-  network_interface {
-    network = "default"
-  }
-}
-
-
 locals {
   params           = jsondecode(file("${path.module}/params/${var.env}.json"))
   zones            = [for zone_id in local.params.zone_ids : "${var.google_region}-${zone_id}"]
