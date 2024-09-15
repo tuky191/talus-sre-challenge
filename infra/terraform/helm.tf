@@ -54,6 +54,15 @@ resource "helm_release" "nginx_ingress" {
     name  = "controller.metrics.service.annotations.prometheus\\.io/path"
     value = "/metrics"
   }
+  set {
+    name  = "controller.metrics.serviceMonitor.enabled"
+    value = "true"
+  }
+
+  set {
+    name  = "controller.metrics.serviceMonitor.additionalLabels.release"
+    value = "prometheus"
+  }
 
   create_namespace = true
   depends_on = [
