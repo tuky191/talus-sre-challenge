@@ -59,3 +59,28 @@ resource "kubernetes_service" "discover_backend_write" {
     kubernetes_namespace.backend_namespace
   ]
 }
+
+
+resource "kubernetes_service" "redis_service" {
+  metadata {
+    name      = "redis"
+    namespace = kubernetes_namespace.data_namespace.metadata[0].name
+    labels = {
+      app = "redis"
+    }
+  }
+
+  spec {
+    selector = {
+      app = "redis"
+    }
+
+    port {
+      port        = 6379
+      target_port = 6379
+      protocol    = "TCP"
+    }
+
+    type = "ClusterIP" # You can change this to LoadBalancer or NodePort if needed
+  }
+}
