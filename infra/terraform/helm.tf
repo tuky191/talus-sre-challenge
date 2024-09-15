@@ -41,12 +41,12 @@ resource "helm_release" "nginx_ingress" {
     value = "true"
   }
   set {
-    name  = "controller.metrics.service.annotations.prometheus\\.io/scrape"
+    name  = "controller.podAnnotations.prometheus\\.io/scrape"
     value = "true"
   }
 
   set {
-    name  = "controller.metrics.service.annotations.prometheus\\.io/port"
+    name  = "controller.podAnnotations.prometheus\\.io/port"
     value = "10254"
   }
 
