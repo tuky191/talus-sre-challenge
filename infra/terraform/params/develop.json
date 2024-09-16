@@ -1,8 +1,8 @@
 {
     "backend": {
         "replicas": {
-            "read": 2,
-            "write": 2
+            "read": 1,
+            "write": 1
         }
     },
     "pools": [
