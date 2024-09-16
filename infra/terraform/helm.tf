@@ -97,6 +97,10 @@ resource "helm_release" "loki_stack" {
   version    = "2.10.1"
 
   set {
+    name  = "loki.isDefault"
+    value = "false"
+  }
+  set {
     name  = "loki.persistence.enabled"
     value = "true"
   }
