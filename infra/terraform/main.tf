@@ -59,8 +59,5 @@ locals {
   terraform_source = "tf-infra-interview"
   ranges           = local.params.ranges
   repository_url   = "ghcr.io/tuky191/talus-sre-challenge"
-  backend_image = join("@", [
-    local.repository_url,
-    var.image_sha,
-  ])
+  backend_image    = var.backend_image
 }

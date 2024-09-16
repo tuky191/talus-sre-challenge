@@ -1,5 +1,6 @@
 name: docker-build-and-deploy
 on:
+  workflow_dispatch:
   pull_request:
     branches:
       - main
@@ -65,14 +66,14 @@ jobs:
           labels: ${{ env.DOCKER_METADATA_OUTPUT_LABELS }}
 
       - name: Get image digest from build-push-action
-        run: echo "digest=${{ steps.build.outputs.digest }}" >> $GITHUB_ENV
+        run: echo "backend_image=ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}" >> $GITHUB_ENV
 
       - name: Run update_image_sha.sh script
         run: |
           chmod +x ./bin/update_image_sha.sh
           bash bin/update_image_sha.sh
         env:
-          digest: ${{ env.digest }}
+          backend_image: ${{ env.backend_image }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
