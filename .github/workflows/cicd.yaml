@@ -14,7 +14,7 @@ env:
   TERRAFORM_WORKSPACE_ID: ${{ vars.TERRAFORM_WORKSPACE_ID }}
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: read
