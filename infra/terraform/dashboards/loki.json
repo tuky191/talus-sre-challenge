@@ -186,12 +186,12 @@
             {
                 "current": {
                     "selected": true,
-                    "text": "flask-app",
-                    "value": "flask-app"
+                    "text": "grafana",
+                    "value": "grafana"
                 },
                 "datasource": {
                     "type": "loki",
-                    "uid": "bdy01v55u6800f"
+                    "uid": "P8E80F9AEF21F6940"
                 },
                 "definition": "",
                 "hide": 0,
