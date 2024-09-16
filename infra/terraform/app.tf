@@ -66,6 +66,16 @@ resource "kubernetes_deployment" "backend_app" {
           name  = "flask-app"
           image = local.backend_image
 
+          resources {
+            requests = {
+              cpu    = "50m"
+              memory = "32Mi"
+            }
+            limits = {
+              cpu    = "100m"
+              memory = "64Mi"
+            }
+          }
           port {
             container_port = 5000
           }
