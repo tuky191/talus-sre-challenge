@@ -9,8 +9,8 @@ resource "kubernetes_horizontal_pod_autoscaler_v2" "backend_app_autoscaler" {
   }
 
   spec {
-    min_replicas = 2  # Minimum number of replicas
-    max_replicas = 10 # Maximum number of replicas
+    min_replicas = 1
+    max_replicas = 3
 
     scale_target_ref {
       api_version = "apps/v1"
@@ -24,7 +24,7 @@ resource "kubernetes_horizontal_pod_autoscaler_v2" "backend_app_autoscaler" {
         name = "cpu"
         target {
           type                = "Utilization"
-          average_utilization = 80 # Target 80% CPU utilization
+          average_utilization = 80
         }
       }
     }
