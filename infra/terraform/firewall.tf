@@ -1,6 +1,6 @@
-resource "kubernetes_network_policy_v1" "allow_ingress_to_backend_on_5000" {
+resource "kubernetes_network_policy_v1" "allow_ingress_to_backend" {
   metadata {
-    name      = "allow-ingress-to-backend-5000"
+    name      = "allow-ingress-to-backend"
     namespace = kubernetes_namespace.backend_namespace.metadata[0].name
   }
 
@@ -13,8 +13,10 @@ resource "kubernetes_network_policy_v1" "allow_ingress_to_backend_on_5000" {
 
     ingress {
       from {
-        ip_block {
-          cidr = "0.0.0.0/0"
+        namespace_selector {
+          match_labels = {
+            "kubernetes.io/metadata.name" = "ingress-nginx"
+          }
         }
       }
 
@@ -27,9 +29,9 @@ resource "kubernetes_network_policy_v1" "allow_ingress_to_backend_on_5000" {
 }
 
 
-resource "kubernetes_network_policy_v1" "allow_ingress_to_data_on_6379" {
+resource "kubernetes_network_policy_v1" "allow_ingress_to_data" {
   metadata {
-    name      = "allow-ingress-to-data-6379"
+    name      = "allow-ingress-to-data"
     namespace = kubernetes_namespace.data_namespace.metadata[0].name
   }
 
@@ -42,8 +44,10 @@ resource "kubernetes_network_policy_v1" "allow_ingress_to_data_on_6379" {
 
     ingress {
       from {
-        ip_block {
-          cidr = "0.0.0.0/0"
+        namespace_selector {
+          match_labels = {
+            "kubernetes.io/metadata.name" = kubernetes_namespace.backend_namespace.metadata[0].name
+          }
         }
       }
 
@@ -108,20 +112,6 @@ resource "kubernetes_network_policy_v1" "allow_ingress_to_monitoring" {
 
       ports {
         port     = 9090
-        protocol = "TCP"
-      }
-    }
-
-
-    ingress {
-      from {
-        ip_block {
-          cidr = "0.0.0.0/0"
-        }
-      }
-
-      ports {
-        port     = 8080
         protocol = "TCP"
       }
     }
