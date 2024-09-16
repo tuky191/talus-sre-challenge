@@ -36,8 +36,8 @@ resource "kubernetes_secret" "grafana_admin_secret" {
   }
 
   data = {
-    "admin-user"     = base64encode("admin")
-    "admin-password" = base64encode(var.grafana_admin_password)
+    "admin-user"     = "admin"
+    "admin-password" = var.grafana_admin_password
   }
 
   type = "Opaque"
