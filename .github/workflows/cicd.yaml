@@ -53,6 +53,7 @@ jobs:
             type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
 
       - name: Build docker image
+        id: build
         uses: docker/build-push-action@v3
         with:
           push: ${{ github.event_name != 'pull_request' }}
@@ -61,9 +62,8 @@ jobs:
           tags: ${{ env.DOCKER_METADATA_OUTPUT_TAGS }}
           labels: ${{ env.DOCKER_METADATA_OUTPUT_LABELS }}
 
-      - name: Get image digest
-        id: get_digest
-        run: echo "digest=$(docker inspect --format='{{index .RepoDigests 0}}' ghcr.io/${{ github.repository }}:latest | cut -d'@' -f2)" >> $GITHUB_ENV
+      - name: Get image digest from build-push-action
+        run: echo "digest=${{ steps.build.outputs.digest }}" >> $GITHUB_ENV
 
       - name: Run update_image_sha.sh script
         run: |
