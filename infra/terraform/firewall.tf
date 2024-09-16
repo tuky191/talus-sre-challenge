@@ -56,9 +56,9 @@ resource "kubernetes_network_policy_v1" "allow_ingress_to_data_on_6379" {
 }
 
 
-resource "kubernetes_network_policy_v1" "allow_ingress_to_monitoring_on_3000_and_prometheus_ports" {
+resource "kubernetes_network_policy_v1" "allow_ingress_to_monitoring" {
   metadata {
-    name      = "allow-ingress-to-monitoring-3000-prometheus"
+    name      = "allow-ingress-to-monitoring"
     namespace = kubernetes_namespace.monitoring_namespace.metadata[0].name
   }
 
@@ -71,8 +71,10 @@ resource "kubernetes_network_policy_v1" "allow_ingress_to_monitoring_on_3000_and
 
     ingress {
       from {
-        ip_block {
-          cidr = "0.0.0.0/0"
+        namespace_selector {
+          match_labels = {
+            "kubernetes.io/metadata.name" = kubernetes_namespace.monitoring_namespace.metadata[0].name
+          }
         }
       }
 
