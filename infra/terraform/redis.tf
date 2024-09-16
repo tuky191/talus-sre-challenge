@@ -48,7 +48,7 @@ resource "kubernetes_stateful_set" "redis" {
             }
             requests = {
               memory = "128Mi"
-              cpu    = "250m"
+              cpu    = "5m"
             }
           }
         }
