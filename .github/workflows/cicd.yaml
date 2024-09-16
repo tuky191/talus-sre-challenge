@@ -68,7 +68,7 @@ jobs:
       - name: Run update_image_sha.sh script
         run: |
           chmod +x ./bin/update_image_sha.sh
-          bash bin/update_image_sha.sh ${{ secrets.TF_CLOUD_TOKEN }} ${{ env.TERRAFORM_WORKSPACE_ID }} ${{ env.digest }}
+          bash bin/update_image_sha.sh
         env:
           TF_CLOUD_TOKEN: ${{ secrets.TF_CLOUD_TOKEN }}
           TERRAFORM_WORKSPACE_ID: ${{ env.TERRAFORM_WORKSPACE_ID }}

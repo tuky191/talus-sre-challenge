@@ -1,9 +1,9 @@
 #!/bin/bash
 #set -x
 # Variables
-token="$1"
-workspace_id="$2"
-new_image_sha="$3"
+token="${TF_CLOUD_TOKEN}"
+workspace_id="${TERRAFORM_WORKSPACE_ID}"
+new_image_sha="${digest}"
 
 echo $token
 echo $workspace_id
