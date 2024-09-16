@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x
 # Variables
 token="$1"
 workspace_id="$2"
