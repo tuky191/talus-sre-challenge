@@ -84,6 +84,21 @@ resource "kubernetes_network_policy_v1" "allow_ingress_to_monitoring_on_3000_and
 
     ingress {
       from {
+        namespace_selector {
+          match_labels = {
+            "kubernetes.io/metadata.name" = kubernetes_namespace.monitoring_namespace.metadata[0].name
+          }
+        }
+      }
+
+      ports {
+        port     = 3100
+        protocol = "TCP"
+      }
+    }
+
+    ingress {
+      from {
         ip_block {
           cidr = "0.0.0.0/0"
         }
