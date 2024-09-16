@@ -10,13 +10,13 @@
             "backend-pool": {
                 "scale": {
                     "a": {
-                        "machine_type": "e2-small",
+                        "machine_type": "e2-medium",
                         "initial_node_count": 1,
                         "min_count": 1,
                         "max_count": 2
                     },
                     "b": {
-                        "machine_type": "e2-small",
+                        "machine_type": "e2-medium",
                         "initial_node_count": 1,
                         "min_count": 1,
                         "max_count": 2
@@ -26,7 +26,7 @@
             "monitoring-pool": {
                 "scale": {
                     "a": {
-                        "machine_type": "e2-small",
+                        "machine_type": "e2-medium",
                         "initial_node_count": 1,
                         "min_count": 1,
                         "max_count": 1
@@ -36,7 +36,7 @@
             "data-pool": {
                 "scale": {
                     "a": {
-                        "machine_type": "e2-small",
+                        "machine_type": "e2-medium",
                         "initial_node_count": 1,
                         "min_count": 1,
                         "max_count": 1
