@@ -10,10 +10,11 @@ on:
       - main
 env:
   tf_actions_working_dir: ./infra/terraform
+  TF_CLOUD_TOKEN: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
+  TERRAFORM_WORKSPACE_ID: ${{ vars.TERRAFORM_WORKSPACE_ID }}
 
 jobs:
   build:
-    environment: ${{ github.ref_name }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -71,8 +72,6 @@ jobs:
           chmod +x ./bin/update_image_sha.sh
           bash bin/update_image_sha.sh
         env:
-          TF_CLOUD_TOKEN: ${{ secrets.TF_CLOUD_TOKEN }}
-          TERRAFORM_WORKSPACE_ID: ${{ env.TERRAFORM_WORKSPACE_ID }}
           digest: ${{ env.digest }}
 
       - name: Setup Terraform
