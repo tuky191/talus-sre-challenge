@@ -1,9 +1,13 @@
 #!/bin/bash
-set -x
+#set -x
 # Variables
 token="$1"
 workspace_id="$2"
 new_image_sha="$3"
+
+echo $token
+echo $workspace_id
+echo $new_image_sha
 
 # 1. List all variables in the workspace
 echo "Fetching variables from Terraform Cloud workspace..."
