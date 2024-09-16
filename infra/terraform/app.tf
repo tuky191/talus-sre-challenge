@@ -69,11 +69,11 @@ resource "kubernetes_deployment" "backend_app" {
           resources {
             requests = {
               cpu    = "50m"
-              memory = "32Mi"
+              memory = "64Mi"
             }
             limits = {
               cpu    = "100m"
-              memory = "64Mi"
+              memory = "128Mi"
             }
           }
           port {
