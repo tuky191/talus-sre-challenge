@@ -29,4 +29,16 @@ resource "kubernetes_secret" "ghcr_image_pull_secret" {
   }
 }
 
+resource "kubernetes_secret" "grafana_admin_secret" {
+  metadata {
+    name      = "grafana-admin-secret"
+    namespace = kubernetes_namespace.monitoring_namespace.metadata[0].name
+  }
 
+  data = {
+    "admin-user"     = base64encode("admin")
+    "admin-password" = base64encode(var.grafana_admin_password)
+  }
+
+  type = "Opaque"
+}

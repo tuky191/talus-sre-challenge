@@ -13,6 +13,8 @@ prometheus-node-exporter:
                   - "monitoring-pool-a"
 
 grafana:
+  admin:
+    existingSecret: grafana-admin-secret 
   persistence:
     enabled: true
     type: sts

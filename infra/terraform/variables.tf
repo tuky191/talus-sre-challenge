@@ -49,3 +49,9 @@ variable "registry_email" {
   type        = string
   default     = "turxaala@gmail.com"
 }
+
+variable "grafana_admin_password" {
+  description = "Admin password for grafana"
+  type        = string
+  default     = ""
+}
