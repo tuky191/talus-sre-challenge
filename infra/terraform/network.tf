@@ -58,23 +58,20 @@ resource "kubernetes_ingress_v1" "ingress_backend" {
     name      = "ingress-rest"
     namespace = kubernetes_namespace.backend_namespace.metadata[0].name
     annotations = {
-      "kubernetes.io/ingress.class"                       = "nginx",
-      "nginx.ingress.kubernetes.io/configuration-snippet" = "internal;\nrewrite ^ $original_uri break;",
-      "nginx.ingress.kubernetes.io/server-snippet"        = <<EOF
-          if ( $request_method = GET) {
-            set $target_destination '/_read';
+      "kubernetes.io/ingress.class"                     = "nginx",
+      "nginx.ingress.kubernetes.io/server-snippet"      = <<EOF
+          if ($request_method = GET) {
+            proxy_pass http://discover-backend-read:5000;
           }
-          if ( $request_method != GET) {
-            set $target_destination '/_write';
+          if ($request_method = POST) {
+            proxy_pass http://discover-backend-write:5000;
           }
-          set $original_uri $uri;
-          rewrite ^ $target_destination last;     
       EOF
-      "nginx.ingress.kubernetes.io/cors-allow-origin"     = "*",
-      "nginx.ingress.kubernetes.io/cors-allow-methods"    = "GET, PUT, POST, DELETE, PATCH, OPTIONS",
-      "nginx.ingress.kubernetes.io/cors-allow-headers"    = "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range",
-      "nginx.ingress.kubernetes.io/cors-expose-headers"   = "Content-Length,Content-Range"
-      "nginx.ingress.kubernetes.io/enable-cors"           = "true"
+      "nginx.ingress.kubernetes.io/cors-allow-origin"   = "*",
+      "nginx.ingress.kubernetes.io/cors-allow-methods"  = "GET, PUT, POST, DELETE, PATCH, OPTIONS",
+      "nginx.ingress.kubernetes.io/cors-allow-headers"  = "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range",
+      "nginx.ingress.kubernetes.io/cors-expose-headers" = "Content-Length,Content-Range",
+      "nginx.ingress.kubernetes.io/enable-cors"         = "true"
     }
   }
 
@@ -83,7 +80,7 @@ resource "kubernetes_ingress_v1" "ingress_backend" {
       host = "backend.talus-challenge.uk"
       http {
         path {
-          path      = "/_read"
+          path      = "/"
           path_type = "Prefix"
           backend {
             service {
@@ -95,7 +92,7 @@ resource "kubernetes_ingress_v1" "ingress_backend" {
           }
         }
         path {
-          path      = "/_write"
+          path      = "/"
           path_type = "Prefix"
           backend {
             service {
@@ -108,7 +105,5 @@ resource "kubernetes_ingress_v1" "ingress_backend" {
         }
       }
     }
-
   }
 }
-
