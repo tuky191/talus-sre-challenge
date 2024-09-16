@@ -1,5 +1,4 @@
-name: build and deploy
-
+name: docker-build-and-deploy
 on:
   pull_request:
     branches:
@@ -61,6 +60,19 @@ jobs:
           platforms: linux/amd64
           tags: ${{ env.DOCKER_METADATA_OUTPUT_TAGS }}
           labels: ${{ env.DOCKER_METADATA_OUTPUT_LABELS }}
+
+      - name: Get image digest
+        id: get_digest
+        run: echo "digest=$(docker inspect --format='{{index .RepoDigests 0}}' ghcr.io/${{ github.repository }}:latest | cut -d'@' -f2)" >> $GITHUB_ENV
+
+      - name: Run update_image_sha.sh script
+        run: |
+          chmod +x ./infra/terraform/bin/update_image_sha.sh
+          ./infra/terraform/bin/update_image_sha.sh ${{ secrets.TF_CLOUD_TOKEN }} ${{ env.TERRAFORM_WORKSPACE_ID }} ${{ env.digest }}
+        env:
+          TF_CLOUD_TOKEN: ${{ secrets.TF_CLOUD_TOKEN }}
+          TERRAFORM_WORKSPACE_ID: ${{ secrets.TERRAFORM_WORKSPACE_ID }}
+          digest: ${{ env.digest }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
