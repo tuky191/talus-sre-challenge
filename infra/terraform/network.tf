@@ -52,28 +52,18 @@ resource "google_compute_router_nat" "nat" {
 
 
 
-resource "kubernetes_ingress_v1" "ingress_backend" {
+resource "kubernetes_ingress_v1" "ingress_backend_get" {
   metadata {
-    name      = "ingress-rest"
+    name      = "ingress-get"
     namespace = kubernetes_namespace.backend_namespace.metadata[0].name
     annotations = {
-      "kubernetes.io/ingress.class"                       = "nginx",
-      "nginx.ingress.kubernetes.io/configuration-snippet" = "internal;\nrewrite ^ $original_uri break;",
-      "nginx.ingress.kubernetes.io/server-snippet"        = <<EOF
-          if ( $request_method = GET) {
-            set $target_destination '/_read';
-          }
-          if ( $request_method != GET) {
-            set $target_destination '/_write';
-          }
-          set $original_uri $uri;
-          rewrite ^ $target_destination last;     
-      EOF
-      "nginx.ingress.kubernetes.io/cors-allow-origin"     = "*",
-      "nginx.ingress.kubernetes.io/cors-allow-methods"    = "GET, PUT, POST, DELETE, PATCH, OPTIONS",
-      "nginx.ingress.kubernetes.io/cors-allow-headers"    = "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range",
-      "nginx.ingress.kubernetes.io/cors-expose-headers"   = "Content-Length,Content-Range"
-      "nginx.ingress.kubernetes.io/enable-cors"           = "true"
+      "kubernetes.io/ingress.class"                     = "nginx",
+      "nginx.ingress.kubernetes.io/limit-methods"       = "GET",
+      "nginx.ingress.kubernetes.io/enable-cors"         = "true",
+      "nginx.ingress.kubernetes.io/cors-allow-origin"   = "*",
+      "nginx.ingress.kubernetes.io/cors-allow-methods"  = "GET, PUT, POST, DELETE, PATCH, OPTIONS",
+      "nginx.ingress.kubernetes.io/cors-allow-headers"  = "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range",
+      "nginx.ingress.kubernetes.io/cors-expose-headers" = "Content-Length,Content-Range"
     }
   }
 
@@ -82,7 +72,7 @@ resource "kubernetes_ingress_v1" "ingress_backend" {
       host = "backend.talus-challenge.uk"
       http {
         path {
-          path      = "/_read"
+          path      = "/"
           path_type = "Prefix"
           backend {
             service {
@@ -93,8 +83,32 @@ resource "kubernetes_ingress_v1" "ingress_backend" {
             }
           }
         }
+      }
+    }
+  }
+}
+
+resource "kubernetes_ingress_v1" "ingress_backend_post" {
+  metadata {
+    name      = "ingress-post"
+    namespace = kubernetes_namespace.backend_namespace.metadata[0].name
+    annotations = {
+      "kubernetes.io/ingress.class"                     = "nginx",
+      "nginx.ingress.kubernetes.io/limit-methods"       = "POST",
+      "nginx.ingress.kubernetes.io/enable-cors"         = "true",
+      "nginx.ingress.kubernetes.io/cors-allow-origin"   = "*",
+      "nginx.ingress.kubernetes.io/cors-allow-methods"  = "GET, PUT, POST, DELETE, PATCH, OPTIONS",
+      "nginx.ingress.kubernetes.io/cors-allow-headers"  = "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range",
+      "nginx.ingress.kubernetes.io/cors-expose-headers" = "Content-Length,Content-Range"
+    }
+  }
+
+  spec {
+    rule {
+      host = "backend.talus-challenge.uk"
+      http {
         path {
-          path      = "/_write"
+          path      = "/"
           path_type = "Prefix"
           backend {
             service {
@@ -107,7 +121,5 @@ resource "kubernetes_ingress_v1" "ingress_backend" {
         }
       }
     }
-
   }
 }
-
