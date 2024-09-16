@@ -61,6 +61,6 @@ locals {
   repository_url   = "ghcr.io/tuky191/talus-sre-challenge"
   backend_image = join(":", [
     local.repository_url,
-    "latest",
+    var.image_sha,
   ])
 }

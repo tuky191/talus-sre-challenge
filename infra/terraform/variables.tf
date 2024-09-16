@@ -55,3 +55,9 @@ variable "grafana_admin_password" {
   type        = string
   default     = ""
 }
+
+variable "image_sha" {
+  description = "Image digest for backend app image"
+  type        = string
+  default     = ""
+}
