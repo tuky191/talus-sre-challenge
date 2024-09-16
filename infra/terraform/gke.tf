@@ -32,16 +32,17 @@ module "gke" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
   version = "~> 31.0"
 
-  project_id                 = var.google_project
-  name                       = "${var.google_project}-gke"
-  region                     = var.google_region
-  zones                      = local.zones
-  network                    = module.vpc.network_name
-  subnetwork                 = module.vpc.subnets_names[0]
-  ip_range_pods              = var.ip_range_pods_name
-  ip_range_services          = var.ip_range_services_name
+  project_id        = var.google_project
+  name              = "${var.google_project}-gke"
+  region            = var.google_region
+  zones             = local.zones
+  network           = module.vpc.network_name
+  subnetwork        = module.vpc.subnets_names[0]
+  ip_range_pods     = var.ip_range_pods_name
+  ip_range_services = var.ip_range_services_name
+  #datapath_provider          = "ADVANCED_DATAPATH"
   http_load_balancing        = false
-  network_policy             = false
+  network_policy             = true
   horizontal_pod_autoscaling = true
   filestore_csi_driver       = false
   dns_cache                  = false
