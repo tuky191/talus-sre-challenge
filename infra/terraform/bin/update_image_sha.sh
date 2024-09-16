@@ -5,10 +5,12 @@ token="${TF_CLOUD_TOKEN}"
 workspace_id="${TERRAFORM_WORKSPACE_ID}"
 new_image_sha="${digest}"
 
+echo "we got here"
 echo $token
 echo $workspace_id
 echo $new_image_sha
 
+echo "also here"
 # 1. List all variables in the workspace
 echo "Fetching variables from Terraform Cloud workspace..."
 
