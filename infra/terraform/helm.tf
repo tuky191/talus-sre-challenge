@@ -148,11 +148,6 @@ resource "helm_release" "loki_stack" {
     value = "true"
   }
 
-  set {
-    name  = "promtail.nodeSelector.cloud\\.google\\.com/gke-nodepool"
-    value = "monitoring-pool-a"
-  }
-
   create_namespace = false
   depends_on = [
     helm_release.kube-prometheus-stack
