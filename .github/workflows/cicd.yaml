@@ -68,12 +68,9 @@ jobs:
       - name: Get image digest from build-push-action
         run: echo "backend_image=ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}" >> $GITHUB_ENV
 
-      - name: Run update_image_sha.sh script
+      - name: Update backend image
         run: |
-          chmod +x ./bin/update_image_sha.sh
-          bash bin/update_image_sha.sh
-        env:
-          backend_image: ${{ env.backend_image }}
+          bash bin/create_or_update_variable.sh "backend_image" "${{ env.backend_image }}" false
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -86,6 +83,6 @@ jobs:
       - name: Terraform Plan
         run: terraform plan
 
-      - name: Terraform Apply
-        if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve
+      # - name: Terraform Apply
+      #   if: github.ref == 'refs/heads/main'
+      #   run: terraform apply -auto-approve
