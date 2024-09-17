@@ -14,8 +14,9 @@ prometheusOperator:
     cloud.google.com/gke-nodepool: "monitoring-pool-a"
 
 alertmanager:
-  nodeSelector:
-    cloud.google.com/gke-nodepool: "monitoring-pool-a"
+  alertmanagerSpec:
+    nodeSelector:
+      cloud.google.com/gke-nodepool: "monitoring-pool-a"
 
 grafana:
   nodeSelector:
@@ -51,9 +52,9 @@ grafana:
       labelValue: "1"
 
 prometheus:
-  nodeSelector:
-    cloud.google.com/gke-nodepool: "monitoring-pool-a"
   prometheusSpec:
+    nodeSelector:
+      cloud.google.com/gke-nodepool: "monitoring-pool-a"  
     podMonitorSelectorNilUsesHelmValues: false
     serviceMonitorSelectorNilUsesHelmValues: false
     storageSpec:
