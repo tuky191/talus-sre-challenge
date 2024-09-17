@@ -97,8 +97,9 @@ resource "helm_release" "loki_stack" {
   repository = "https://grafana.github.io/helm-charts"
   version    = "2.10.2"
 
+
   set {
-    name  = "loki.nodeSelector.cloud.google.com/gke-nodepool"
+    name  = "loki.nodeSelector.cloud\\.google\\.com/gke-nodepool"
     value = "monitoring-pool-a"
   }
   set {
@@ -163,7 +164,7 @@ resource "helm_release" "loki_stack" {
   }
 
   set {
-    name  = "promtail.nodeSelector.cloud.google.com/gke-nodepool"
+    name  = "promtail.nodeSelector.cloud\\.google\\.com/gke-nodepool"
     value = "monitoring-pool-a"
   }
 
