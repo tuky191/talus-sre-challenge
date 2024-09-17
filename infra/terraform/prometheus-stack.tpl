@@ -13,6 +13,10 @@ prometheusOperator:
   nodeSelector:
     cloud.google.com/gke-nodepool: "monitoring-pool-a"
 
+alertmanager:
+  nodeSelector:
+    cloud.google.com/gke-nodepool: "monitoring-pool-a"
+
 grafana:
   nodeSelector:
     cloud.google.com/gke-nodepool: "monitoring-pool-a"
