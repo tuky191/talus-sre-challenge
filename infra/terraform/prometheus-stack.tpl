@@ -2,15 +2,8 @@ prometheus-node-exporter:
   tolerations:
     - key: "node-role.kubernetes.io/master"
       effect: "NoSchedule"
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-          - matchExpressions:
-              - key: "cloud.google.com/gke-nodepool"
-                operator: In
-                values:
-                  - "monitoring-pool-a"
+  nodeSelector:
+    cloud.google.com/gke-nodepool: "monitoring-pool-a"
 
 grafana:
   admin:
@@ -37,15 +30,8 @@ grafana:
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     # No TLS required as Cloudflare will handle SSL termination
 
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-          - matchExpressions:
-              - key: "cloud.google.com/gke-nodepool"
-                operator: In
-                values:
-                  - "monitoring-pool-a"
+  nodeSelector:
+    cloud.google.com/gke-nodepool: "monitoring-pool-a"
 
   sidecar:
     alerts:
@@ -65,12 +51,5 @@ prometheus:
           resources:
             requests:
               storage: 10Gi
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: "cloud.google.com/gke-nodepool"
-                  operator: In
-                  values:
-                    - "monitoring-pool-a"
+    nodeSelector:
+      cloud.google.com/gke-nodepool: "monitoring-pool-a"
