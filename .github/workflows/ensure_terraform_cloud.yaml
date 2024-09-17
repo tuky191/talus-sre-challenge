@@ -5,7 +5,7 @@ on:
 
 env:
   tf_actions_working_dir: ./infra/terraform/bin
-  TF_CLOUD_TOKEN: ${{ secrets.TF_CLOUD_TOKEN }}
+  TF_CLOUD_TOKEN: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
   ORGANIZATION_NAME: ${{ vars.TERRAFORM_ORGANIZATION_NAME }} # Using a repository variable
   WORKSPACE_NAME: ${{ vars.TERRAFORM_WORKSPACE_NAME }}
 
