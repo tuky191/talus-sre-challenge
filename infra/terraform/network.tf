@@ -79,7 +79,7 @@ resource "kubernetes_ingress_v1" "ingress_backend" {
 
   spec {
     rule {
-      host = "backend.talus-challenge.uk"
+      host = "backend.${var.domain}"
       http {
         path {
           path      = "/_read"

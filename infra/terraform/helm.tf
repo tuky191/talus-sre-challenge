@@ -78,7 +78,7 @@ resource "helm_release" "kube-prometheus-stack" {
   version    = "57.1.1"
   namespace  = kubernetes_namespace.monitoring_namespace.metadata[0].name
   values = [templatefile("${path.module}/prometheus-stack.tpl", {
-    grafana_host = "grafana.talus-challenge.uk"
+    grafana_host = "grafana.${var.domain}"
   })]
 }
 

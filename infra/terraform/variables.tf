@@ -61,3 +61,9 @@ variable "backend_image" {
   type        = string
   default     = ""
 }
+
+variable "domain" {
+  description = "Domain for accessing the backend and grafana"
+  type        = string
+  default     = ""
+}
