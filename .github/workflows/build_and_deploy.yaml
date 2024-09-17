@@ -1,4 +1,4 @@
-name: build-and-deploy
+name: Build Image and Deploy Infra
 on:
   workflow_dispatch:
   pull_request:
