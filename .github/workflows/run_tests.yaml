@@ -1,4 +1,4 @@
-name: Run App Tests
+name: Run Tests
 
 on:
   workflow_dispatch:
