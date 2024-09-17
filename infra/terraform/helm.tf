@@ -66,7 +66,8 @@ resource "helm_release" "nginx_ingress" {
 
   create_namespace = true
   depends_on = [
-    google_compute_address.this
+    google_compute_address.this,
+    helm_release.kube-prometheus-stack
   ]
 }
 
