@@ -11,11 +11,24 @@ flask = "^3.0.3"
 python-dotenv = "^1.0.1"
 redis = "^5.0.8"
 gunicorn = "^23.0.0"
+testcontainers = "^4.8.1"
+pytest-asyncio = "^0.24.0"
+pytest-xprocess = "^1.0.2"
+pytest = "^8.3.3"
 
 [tool.poetry.scripts]
 flask = "flask.cli:main"
+
+[tool.poetry.group.dev.dependencies]
+pytest-xprocess = "^1.0.2"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+
+# [tool.pytest.ini_options]
+# pythonpath = [
+#   "."
+# ]
+    
