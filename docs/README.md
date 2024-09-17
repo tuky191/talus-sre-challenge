@@ -325,3 +325,11 @@ Trying to access it from backend namespace results in timeout.
 root@backend-app-read-a-7fd8484c4c-kngk9:/app# curl loki-stack.monitoring.svc.cluster.local:3100 -v
 - Trying 10.0.35.16:3100...
 ```
+
+#### Add automated tests
+
+Tests are automatically run before the build process and are triggered on every push to the main branch, ensuring continuous integration and validation of code changes.
+
+### Cleanup
+
+To cleanup resources you can run [Destroy Infra](../.github/workflows/destroy.yaml)
