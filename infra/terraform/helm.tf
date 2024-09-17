@@ -149,21 +149,6 @@ resource "helm_release" "loki_stack" {
   }
 
   set {
-    name  = "promtail.persistence.enabled"
-    value = "true"
-  }
-
-  set {
-    name  = "promtail.persistence.size"
-    value = "10Gi"
-  }
-
-  set {
-    name  = "promtail.persistence.storageClassName"
-    value = "standard-rwo"
-  }
-
-  set {
     name  = "promtail.nodeSelector.cloud\\.google\\.com/gke-nodepool"
     value = "monitoring-pool-a"
   }
