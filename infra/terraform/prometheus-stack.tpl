@@ -5,6 +5,14 @@ prometheus-node-exporter:
   nodeSelector:
     cloud.google.com/gke-nodepool: "monitoring-pool-a"
 
+kube-state-metrics:
+  nodeSelector:
+    cloud.google.com/gke-nodepool: "monitoring-pool-a"
+
+prometheusOperator:
+  nodeSelector:
+    cloud.google.com/gke-nodepool: "monitoring-pool-a"
+
 grafana:
   nodeSelector:
     cloud.google.com/gke-nodepool: "monitoring-pool-a"
@@ -52,4 +60,5 @@ prometheus:
           resources:
             requests:
               storage: 10Gi
+
 
