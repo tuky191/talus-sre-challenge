@@ -9,30 +9,45 @@ resource "google_project_iam_member" "cluster_service_account-nodeService_accoun
   project = var.google_project
   role    = "roles/container.defaultNodeServiceAccount"
   member  = google_service_account.default.member
+  depends_on = [
+    google_service_account.default
+  ]
 }
 
 resource "google_project_iam_member" "cluster_service_account-metric_writer" {
   project = var.google_project
   role    = "roles/monitoring.metricWriter"
   member  = google_service_account.default.member
+  depends_on = [
+    google_service_account.default
+  ]
 }
 
 resource "google_project_iam_member" "cluster_service_account-resourceMetadata-writer" {
   project = var.google_project
   role    = "roles/stackdriver.resourceMetadata.writer"
   member  = google_service_account.default.member
+  depends_on = [
+    google_service_account.default
+  ]
 }
 
 resource "google_project_iam_member" "cluster_service_account-gcr" {
   project = var.google_project
   role    = "roles/storage.objectViewer"
   member  = "serviceAccount:${google_service_account.default.email}"
+  depends_on = [
+    google_service_account.default
+  ]
 }
 
 resource "google_project_iam_member" "cluster_service_account-artifact-registry" {
   project = var.google_project
   role    = "roles/artifactregistry.reader"
   member  = "serviceAccount:${google_service_account.default.email}"
+  depends_on = [
+    google_service_account.default
+  ]
 }
 
 resource "google_service_account" "backend_sa" {
@@ -46,6 +61,10 @@ resource "google_project_iam_binding" "storage_object_user" {
 
   members = [
     "serviceAccount:${google_service_account.backend_sa.email}"
+  ]
+
+  depends_on = [
+    kubernetes_service_account.backend_sa
   ]
 }
 
@@ -66,6 +85,9 @@ resource "kubernetes_service_account" "backend_sa" {
       "iam.gke.io/gcp-service-account" = google_service_account.backend_sa.email
     }
   }
+  depends_on = [
+    google_service_account.backend_sa
+  ]
 }
 
 data "google_client_openid_userinfo" "me" {}
