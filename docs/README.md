@@ -147,18 +147,18 @@ On occasion, in case something fails, you can redeploy by using the **_Deploy In
 
 ### Grafana, Prometheus and Loki
 
-The terraform deploys all monitoring resources into the monitoring namespace. Similarly to the docker compose, there preconfigured [dashboards](../infra/terraform/dashboards/) that can be used to monitor backend [performance](../infra/terraform/dashboards/request-handling-performance.json)
+The terraform deploys all monitoring resources into the monitoring namespace. Similarly to the docker compose, there are preconfigured [dashboards](../infra/terraform/dashboards/) that can be used to monitor backend [performance](../infra/terraform/dashboards/request-handling-performance.json)
 or centralized [logging](../infra/terraform/dashboards/loki.json). Kube-prometheus-stack also comes in with many useful charts out of the box.
 
 ## Fault tolerance
 
 ### Readiness and Liveness probes
 
-Pods are deployed with readiness and liveness probes. I have added a simple healthcheck that, when called, pings the redis kv store. This ensures that data can be stored and retrieved. These probes are also used in the Ingress to send traffic only to healthy nodes.
+Pods are deployed with readiness and liveness probes. I have added a simple healthcheck that, when called, pings the redis kv store. This ensures that data can be stored and retrieved. These probes are also used by the Ingress to send traffic only to healthy nodes.
 
 ### Down time handling
 
-With our current setup we can survive N-1 AZ failure. All we need is 1 AZ that's still in operation. For simplicity, and vCPU quota reasons, is redis deployed only to 1 AZ. In real world scenario we would have multi-AZ deployment with replicas, ensuring high availability.
+With our current setup we can survive N-1 AZ failure. For simplicity, and vCPU quota reasons, is redis deployed only to 1 AZ. In real world scenario we would have multi-AZ deployment with replicas, ensuring high availability.
 
 To test we can again utilize hey.
 
@@ -212,7 +212,7 @@ Status code distribution:
   [502] 10 responses
 ```
 
-- While it was running i have delete 1/2 write pods
+- While it was running i have deleted 1/2 write pods
 
 ```bash
 ➜ kubectl delete pod backend-app-write-a-6597b8b7d9-s4hrt -n backend
