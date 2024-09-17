@@ -1,0 +1,69 @@
+name: Destroy Infra
+
+on:
+  workflow_dispatch: # Manual trigger
+
+env:
+  tf_actions_working_dir: ./infra/terraform
+  TF_CLOUD_TOKEN: ${{ secrets.TERRAFORM_CLOUD_TOKEN }} # Top-level secret for Terraform Cloud API token
+  ORGANIZATION_NAME: ${{ vars.TERRAFORM_ORGANIZATION_NAME }} # Repository variable for organization name
+  WORKSPACE_NAME: ${{ vars.TERRAFORM_WORKSPACE_NAME }} # Repository variable for workspace name
+
+jobs:
+  terraform-destroy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.tf_actions_working_dir }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
+
+      - name: Create terraform.tf.template
+        run: |
+          cat <<EOF > terraform.tf.template
+          terraform {
+            required_version = ">= 1.9.5"
+            
+            cloud {
+              organization = "\${ORGANIZATION_NAME}"
+              workspaces {
+                name = "\${WORKSPACE_NAME}"
+              }
+            }
+            required_providers {
+              google = {
+                source  = "hashicorp/google"
+                version = "5.37.0"
+              }
+            }
+          }
+          EOF
+
+      - name: Create terraform.tf using envsubst
+        run: |
+          envsubst < terraform.tf.template > terraform.tf
+        env:
+          ORGANIZATION_NAME: ${{ env.ORGANIZATION_NAME }}
+          WORKSPACE_NAME: ${{ env.WORKSPACE_NAME }}
+
+      - name: Display content of terraform.tf
+        run: cat terraform.tf
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: |
+          terraform plan
+
+      - name: Terraform Destroy
+        if: github.ref == 'refs/heads/main'
+        run: |
+          terraform destroy -auto-approve
