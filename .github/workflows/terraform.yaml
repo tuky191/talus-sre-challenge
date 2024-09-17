@@ -34,7 +34,7 @@ jobs:
 
       - name: Create or update google_credentials variable
         run: |
-          bash bin/create_or_update_variable.sh "google_credentials" "${{ secrets.GOOGLE_CREDENTIALS }}" true
+          bash bin/create_or_update_variable.sh "google_credentials" "${{ secrets.GOOGLE_CREDENTIALS }}" false
 
       - name: Create or update google_project variable
         run: |

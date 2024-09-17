@@ -1,5 +1,5 @@
 provider "google" {
-  credentials = base64decode(var.google_credentials)
+  credentials = var.google_credentials
   project     = var.google_project
   region      = var.google_region
   default_labels = {
