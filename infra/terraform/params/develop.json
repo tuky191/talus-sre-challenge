@@ -10,13 +10,13 @@
             "backend-pool": {
                 "scale": {
                     "a": {
-                        "machine_type": "e2-standard-4",
+                        "machine_type": "e2-medium",
                         "initial_node_count": 1,
                         "min_count": 1,
                         "max_count": 2
                     },
                     "b": {
-                        "machine_type": "e2-standard-4",
+                        "machine_type": "e2-medium",
                         "initial_node_count": 1,
                         "min_count": 1,
                         "max_count": 2
