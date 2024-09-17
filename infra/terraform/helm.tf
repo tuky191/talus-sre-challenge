@@ -95,8 +95,12 @@ resource "helm_release" "loki_stack" {
   namespace  = kubernetes_namespace.monitoring_namespace.metadata[0].name
   chart      = "loki-stack"
   repository = "https://grafana.github.io/helm-charts"
-  version    = "2.10.1"
+  version    = "2.10.2"
 
+  set {
+    name  = "loki.nodeSelector.cloud.google.com/gke-nodepool"
+    value = "monitoring-pool-a"
+  }
   set {
     name  = "loki.isDefault"
     value = "false"
@@ -156,6 +160,11 @@ resource "helm_release" "loki_stack" {
   set {
     name  = "promtail.persistence.storageClassName"
     value = "standard-rwo"
+  }
+
+  set {
+    name  = "promtail.nodeSelector.cloud.google.com/gke-nodepool"
+    value = "monitoring-pool-a"
   }
 
   create_namespace = false

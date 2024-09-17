@@ -6,6 +6,8 @@ prometheus-node-exporter:
     cloud.google.com/gke-nodepool: "monitoring-pool-a"
 
 grafana:
+  nodeSelector:
+    cloud.google.com/gke-nodepool: "monitoring-pool-a"
   admin:
     existingSecret: grafana-admin-secret 
   persistence:
@@ -30,9 +32,6 @@ grafana:
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     # No TLS required as Cloudflare will handle SSL termination
 
-  nodeSelector:
-    cloud.google.com/gke-nodepool: "monitoring-pool-a"
-
   sidecar:
     alerts:
       enabled: true
@@ -40,6 +39,8 @@ grafana:
       labelValue: "1"
 
 prometheus:
+  nodeSelector:
+    cloud.google.com/gke-nodepool: "monitoring-pool-a"
   prometheusSpec:
     podMonitorSelectorNilUsesHelmValues: false
     serviceMonitorSelectorNilUsesHelmValues: false
@@ -51,5 +52,4 @@ prometheus:
           resources:
             requests:
               storage: 10Gi
-    nodeSelector:
-      cloud.google.com/gke-nodepool: "monitoring-pool-a"
+
