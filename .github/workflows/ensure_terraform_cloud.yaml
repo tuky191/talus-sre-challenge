@@ -1,0 +1,54 @@
+name: Terraform Cloud Setup
+
+on:
+  workflow_dispatch: # Manual trigger
+
+env:
+  TF_CLOUD_TOKEN: ${{ secrets.TF_CLOUD_TOKEN }}
+  ORGANIZATION_NAME: ${{ vars.TERRAFORM_ORGANIZATION_NAME }} # Using a repository variable
+  WORKSPACE_NAME: ${{ vars.TERRAFORM_WORKSPACE_NAME }}
+
+jobs:
+  setup_terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform organization
+        run: |
+          ./create_or_get_organization.sh "$ORGANIZATION_NAME"
+
+      - name: Set up Terraform workspace
+        run: |
+          ./create_or_get_workspace.sh "$WORKSPACE_NAME"
+
+      # Create or update domain variable
+      - name: Create or update domain variable
+        run: |
+          ./create_or_update_variable.sh "domain" "${{ vars.TERRAFORM_DOMAIN }}" false
+
+      # Create or update google_credentials variable (Sensitive)
+      - name: Create or update google_credentials variable
+        run: |
+          ./create_or_update_variable.sh "google_credentials" "${{ secrets.GOOGLE_CREDENTIALS }}" true
+
+      # Create or update google_project variable
+      - name: Create or update google_project variable
+        run: |
+          ./create_or_update_variable.sh "google_project" "${{ vars.TERRAFORM_GOOGLE_PROJECT }}" false
+
+      # Create or update google_region variable
+      - name: Create or update google_region variable
+        run: |
+          ./create_or_update_variable.sh "google_region" "${{ vars.TERRAFORM_GOOGLE_REGION }}" false
+
+      # Create or update grafana_admin_password variable (Sensitive)
+      - name: Create or update grafana_admin_password variable
+        run: |
+          ./create_or_update_variable.sh "grafana_admin_password" "${{ secrets.GRAFANA_ADMIN_PASSWORD }}" true
+
+      # Create or update pat_token variable (Sensitive)
+      - name: Create or update pat_token variable
+        run: |
+          ./create_or_update_variable.sh "pat_token" "${{ secrets.PAT_TOKEN }}" true
