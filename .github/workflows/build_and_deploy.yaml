@@ -15,8 +15,28 @@ env:
   WORKSPACE_NAME: ${{ vars.TERRAFORM_WORKSPACE_NAME }}
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          export PATH="$HOME/.local/bin:$PATH"
+
+      - name: Install dependencies
+        run: |
+          poetry install
+
+      - name: Run tests
+        run: |
+          poetry run python -m unittest discover -s tests
+
   build:
     runs-on: ubuntu-latest
+    needs: [test]
     permissions:
       contents: read
       packages: write
