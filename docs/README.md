@@ -23,12 +23,12 @@ Regional cluster and workload spread over multiple availability zones ensures th
 Currently there there are 2 READ and 2 WRITE pods. We can lose N-1 AZs and still be able to serve requests.
 
 ```bash
-    ➜ kubectl get pods -n chains
-    NAME                                   READY   STATUS      RESTARTS        AGE
-    backend-app-read-a-698ccb8c5c-wcvdc    1/1     Running     0               6m13s
-    backend-app-read-b-645b96c8d7-xz7cp    1/1     Running     0               38s
-    backend-app-write-a-6b585f6f8c-mg8xn   1/1     Running     0               6m13s
-    backend-app-write-b-7c7fcb79b5-pw85l   1/1     Running     0               6m13s
+    ➜ kubectl get pods -n backend
+    NAME                                   READY   STATUS    RESTARTS   AGE
+    backend-app-read-a-7fd8484c4c-dqvhz    1/1     Running   0          6m28s
+    backend-app-read-b-659d5d8fc5-sw66l    1/1     Running   0          6m28s
+    backend-app-write-a-6597b8b7d9-2qn8g   1/1     Running   0          6m28s
+    backend-app-write-b-56cc5c7cd7-rfgst   1/1     Running   0          6m28s
 ```
 
 ## Dockerization
@@ -61,7 +61,7 @@ To deploy, navigate to the docker folder, first run the build command, then comp
 
 ### ELK
 
-For more comprehensive log processing, [Kibana](http://localhost:5601) can be used to visualize data, create Ingest Pipelines, etc. As show in picture of [discover](./img/kibana.png) view. Filebeat and Logstash are used to forward data to Elastic Search.
+For more comprehensive log processing, [Kibana](http://localhost:5601) can be used to visualize data, create Ingest Pipelines, etc. As shown in this picture of discover [view](./img/kibana.png). Filebeat and Logstash are used to forward data to Elastic Search.
 
 ### Grafana
 
@@ -70,7 +70,7 @@ Alternatively Grafana, together with Prometheus, Loki and Promtail can be used t
 Centralized logs from the backend [service](./img/grafana-logs.png) can be viewed thru Logs / App dashboard.
 Traffic statistics captured from traefik loadbalancer are available from Traefik [chart](./img/traefik.png)
 
-[hey](https://github.com/rakyll/hey) can be used to simulate GET and POST requests.
+[hey](https://github.com/rakyll/hey) is used to simulate GET and POST requests.
 
 ```bash
     hey -n 100000 -c 10 http://localhost/items
@@ -79,7 +79,7 @@ Traffic statistics captured from traefik loadbalancer are available from Traefik
 
 ## Infrastructure Provisioning with Terraform
 
-### Setup
+### Setup - How to deploy the infrastructure using Terraform
 
 Terraform configuration is located in infra/terraform. Whole deployment is automated, driven by github actions [Build Image and Deploy Infra](../.github/workflows/build_and_deploy.yaml). This github action deploys either on manual trigger, or after creation of a new tag.
 
@@ -113,26 +113,25 @@ There are few pre requisites for successfull deployment.
 
 - Create new free [Cloudflare](https://dash.cloudflare.com/sign-up) account
 - Buy or use a domain you already own
-- [Point](./img/cloudflare.png) backend.your-domain and grafana.your-domain to your LoadBalancer IP. You can obtain it from the [Ingress view](./img/gcp-7.png).
-- Cloudflare pro
+- [Point](./img/cloudflare.png) backend.your-domain and grafana.your-domain to your loadbalancer's IP. You can obtain it from the [Ingress view](./img/gcp-7.png).
 
 #### Github
 
 - Navigate to your profile / Developer settings
 - Select Personal access tokens / Tokens (classic)
 - Generate new [token](./img/github-1.png)
-- Go back to your forked repo and add following repository [secrets](./img/github-2.png) and [variables](./img/gcp-3.png)
+- Go back to your forked repo and add following repository [secrets](./img/github-2.png) and [variables](./img/github-3.png)
 
 | Secret Name            | Content                        |
 | ---------------------- | ------------------------------ |
-| GOOGLE_CREDENTIALS     | base64 encoded gcp credentials |
+| GOOGLE_CREDENTIALS     | Base64 encoded gcp credentials |
 | GRAFANA_ADMIN_PASSWORD | Admin password for grafana     |
 | PAT_TOKEN              | Token for ghcr                 |
 | TERRAFORM_CLOUD_TOKEN  | Terraform cloud token          |
 
 | Variable Name               | Content                                                         |
 | --------------------------- | --------------------------------------------------------------- |
-| TERRAFORM_DOMAIN            | domain name for accessing backend and grafana from the internet |
+| TERRAFORM_DOMAIN            | Domain name for accessing backend and grafana from the internet |
 | TERRAFORM_GOOGLE_PROJECT    | Name of the GCP project e.g. talus-challenge                    |
 | TERRAFORM_GOOGLE_REGION     | Region where GCP deploys resources, e.g. us-east5               |
 | TERRAFORM_ORGANIZATION_NAME | Name of terraform organization (created by github action)       |
@@ -143,3 +142,9 @@ There are few pre requisites for successfull deployment.
 
 That's it. From now on everything is setup to happen automatically. Github action will create new terraform organization, workspace and variables. Terraform will deploy all resources to the GCP.
 On occasion, in case something fails, you can redeploy by using the **_Deploy Infra_** github action.
+
+#### Monitoring and Logging
+
+### Grafana, Prometheus and Loki
+
+The terraform deploys all monitoring resources into the monitoring namespace. Similarly to the docker compose, there preconfigured [dashboards](../infra/terraform/dashboards/).
