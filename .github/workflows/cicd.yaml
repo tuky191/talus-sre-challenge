@@ -13,6 +13,8 @@ env:
   tf_actions_working_dir: ./infra/terraform
   TF_CLOUD_TOKEN: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
   TERRAFORM_WORKSPACE_ID: ${{ vars.TERRAFORM_WORKSPACE_ID }}
+  ORGANIZATION_NAME: ${{ vars.TERRAFORM_ORGANIZATION_NAME }}
+  WORKSPACE_NAME: ${{ vars.TERRAFORM_WORKSPACE_NAME }}
 
 jobs:
   build-and-deploy:

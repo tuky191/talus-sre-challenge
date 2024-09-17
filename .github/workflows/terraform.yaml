@@ -8,7 +8,6 @@ env:
   TF_CLOUD_TOKEN: ${{ secrets.TERRAFORM_CLOUD_TOKEN }} # Top-level secret for Terraform Cloud API token
   ORGANIZATION_NAME: ${{ vars.TERRAFORM_ORGANIZATION_NAME }} # Repository variable for organization name
   WORKSPACE_NAME: ${{ vars.TERRAFORM_WORKSPACE_NAME }} # Repository variable for workspace name
-  TERRAFORM_WORKSPACE_NAME: ${{ vars.TERRAFORM_WORKSPACE_NAME }} # Repository variable for workspace ID
 
 jobs:
   terraform-setup:
