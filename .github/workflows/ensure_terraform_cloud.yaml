@@ -10,7 +10,7 @@ env:
   WORKSPACE_NAME: ${{ vars.TERRAFORM_WORKSPACE_NAME }}
 
 jobs:
-  setup_terraform:
+  ensure_terraform:
     runs-on: ubuntu-latest
     defaults:
       run:
