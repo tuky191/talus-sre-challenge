@@ -1,0 +1,23 @@
+# Ignore local Terraform state files
+
+_.tfstate
+_.tfstate.\*
+crash.log
+\*.tfplan
+_.tfvars
+_.tfvars.json
+.terraform/
+.terraform.lock.hcl
+.DS*Store
+*.swp
+_.bak
+_.tmp
+_.log
+.idea/
+.vscode/
+\*.iml
+_.pem
+_.key
+_.crt
+\_.enc
+output.log
