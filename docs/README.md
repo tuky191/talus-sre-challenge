@@ -88,7 +88,7 @@ There are few pre requisites for successfull deployment.
 - [GCP](https://console.cloud.google.com/) account
 - [Terraform Cloud](https://app.terraform.io/public/signup/account) account
 - Fork of [repository](https://github.com/tuky191/talus-sre-challenge)
-- [Cloudflare](https://dash.cloudflare.com/sign-up)
+- [Cloudflare](https://dash.cloudflare.com/sign-up) account
 
 #### GCP
 
