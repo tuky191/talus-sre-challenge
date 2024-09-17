@@ -7,8 +7,6 @@ on:
   push:
     tags:
       - v*
-    # branches:
-    #   - main
 env:
   tf_actions_working_dir: ./infra/terraform
   TF_CLOUD_TOKEN: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
@@ -170,7 +168,7 @@ jobs:
         run: |
           terraform plan
 
-    #   - name: Terraform Apply
-    #     if: github.ref == 'refs/heads/main'
-    #     run: |
-    #       terraform apply -auto-approve
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'
+        run: |
+          terraform apply -auto-approve
