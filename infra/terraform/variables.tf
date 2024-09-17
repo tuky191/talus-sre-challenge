@@ -61,3 +61,13 @@ variable "backend_image" {
   type        = string
   default     = ""
 }
+
+variable "organization" {
+  type    = string
+  default = "talus-sre-challenge"
+}
+
+variable "workspace_name" {
+  type    = string
+  default = "talus-sre-challenge"
+}

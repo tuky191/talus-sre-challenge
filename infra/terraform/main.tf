@@ -2,9 +2,9 @@ terraform {
   required_version = ">= 1.9.5"
 
   cloud {
-    organization = "talus-sre-challenge"
+    organization = var.organization
     workspaces {
-      tags = ["talus-challenge"]
+      name = var.workspace_name
     }
   }
   required_providers {

@@ -73,8 +73,10 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        run: terraform plan
+        run: |
+          terraform plan -var="organization=${{ env.ORGANIZATION_NAME }}" -var="workspace_name=${{ env.WORKSPACE_NAME }}"
 
-    #   - name: Terraform Apply
-    #     if: github.ref == 'refs/heads/main'
-    #     run: terraform apply -auto-approve
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'
+        run: |
+          terraform apply -auto-approve -var="organization=${{ env.ORGANIZATION_NAME }}" -var="workspace_name=${{ env.WORKSPACE_NAME }}"
