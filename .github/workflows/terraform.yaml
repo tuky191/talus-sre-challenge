@@ -1,0 +1,86 @@
+name: Terraform Workflow
+
+on:
+  workflow_dispatch: # Manual trigger
+
+env:
+  tf_actions_working_dir: ./infra/terraform
+  TF_CLOUD_TOKEN: ${{ secrets.TERRAFORM_CLOUD_TOKEN }} # Top-level secret for Terraform Cloud API token
+  ORGANIZATION_NAME: ${{ vars.TERRAFORM_ORGANIZATION_NAME }} # Repository variable for organization name
+  WORKSPACE_NAME: ${{ vars.TERRAFORM_WORKSPACE_NAME }} # Repository variable for workspace name
+  TERRAFORM_WORKSPACE_ID: ${{ vars.TERRAFORM_WORKSPACE_ID }} # Repository variable for workspace ID
+
+jobs:
+  terraform-setup:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.tf_actions_working_dir }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform organization
+        run: |
+          bash bin/create_or_get_organization.sh "$ORGANIZATION_NAME"
+
+      - name: Set up Terraform workspace
+        run: |
+          bash bin/create_or_get_workspace.sh "$WORKSPACE_NAME"
+
+      # Create or update domain variable
+      - name: Create or update domain variable
+        run: |
+          bash bin/create_or_update_variable.sh "domain" "${{ vars.TERRAFORM_DOMAIN }}" false
+
+      # Create or update google_credentials variable (Sensitive)
+      - name: Create or update google_credentials variable
+        run: |
+          bash bin/create_or_update_variable.sh "google_credentials" "${{ secrets.GOOGLE_CREDENTIALS }}" true
+
+      # Create or update google_project variable
+      - name: Create or update google_project variable
+        run: |
+          bash bin/create_or_update_variable.sh "google_project" "${{ vars.TERRAFORM_GOOGLE_PROJECT }}" false
+
+      # Create or update google_region variable
+      - name: Create or update google_region variable
+        run: |
+          bash bin/create_or_update_variable.sh "google_region" "${{ vars.TERRAFORM_GOOGLE_REGION }}" false
+
+      # Create or update grafana_admin_password variable (Sensitive)
+      - name: Create or update grafana_admin_password variable
+        run: |
+          bash bin/create_or_update_variable.sh "grafana_admin_password" "${{ secrets.GRAFANA_ADMIN_PASSWORD }}" true
+
+      # Create or update pat_token variable (Sensitive)
+      - name: Create or update pat_token variable
+        run: |
+          bash bin/create_or_update_variable.sh "pat_token" "${{ secrets.PAT_TOKEN }}" true
+
+  terraform-deploy:
+    runs-on: ubuntu-latest
+    needs: terraform-setup
+    defaults:
+      run:
+        working-directory: ${{ env.tf_actions_working_dir }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve
