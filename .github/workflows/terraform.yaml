@@ -69,14 +69,45 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
 
+      - name: Create terraform.tf.template
+        run: |
+          cat <<EOF > terraform.tf.template
+          terraform {
+            required_version = ">= 1.9.5"
+            
+            cloud {
+              organization = "\${ORGANIZATION_NAME}"
+              workspaces {
+                name = "\${WORKSPACE_NAME}"
+              }
+            }
+            required_providers {
+              google = {
+                source  = "hashicorp/google"
+                version = "5.37.0"
+              }
+            }
+          }
+          EOF
+
+      - name: Create terraform.tf using envsubst
+        run: |
+          envsubst < terraform.tf.template > terraform.tf
+        env:
+          ORGANIZATION_NAME: ${{ env.ORGANIZATION_NAME }}
+          WORKSPACE_NAME: ${{ env.WORKSPACE_NAME }}
+
+      - name: Display content of terraform.tf
+        run: cat terraform.tf
+
       - name: Terraform Init
         run: terraform init
 
       - name: Terraform Plan
         run: |
-          terraform plan -var="organization=${{ env.ORGANIZATION_NAME }}" -var="workspace_name=${{ env.WORKSPACE_NAME }}"
+          terraform plan
 
-      - name: Terraform Apply
-        if: github.ref == 'refs/heads/main'
-        run: |
-          terraform apply -auto-approve -var="organization=${{ env.ORGANIZATION_NAME }}" -var="workspace_name=${{ env.WORKSPACE_NAME }}"
+    #   - name: Terraform Apply
+    #     if: github.ref == 'refs/heads/main'
+    #     run: |
+    #       terraform apply -auto-approve

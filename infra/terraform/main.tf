@@ -1,20 +1,3 @@
-terraform {
-  required_version = ">= 1.9.5"
-
-  cloud {
-    organization = var.organization
-    workspaces {
-      name = var.workspace_name
-    }
-  }
-  required_providers {
-    google = {
-      source  = "hashicorp/google"
-      version = "5.37.0"
-    }
-  }
-}
-
 provider "google" {
   credentials = var.google_credentials
   project     = var.google_project
