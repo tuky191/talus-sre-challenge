@@ -67,6 +67,10 @@ resource "kubernetes_deployment" "backend_app" {
           image = local.backend_image
 
           resources {
+            requests = {
+              cpu    = "5m"
+              memory = "32Mi"
+            }
             limits = {
               cpu    = "350m"
               memory = "256Mi"
