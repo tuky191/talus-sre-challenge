@@ -11,13 +11,13 @@
                 "scale": {
                     "a": {
                         "machine_type": "e2-medium",
-                        "initial_node_count": 2,
+                        "initial_node_count": 1,
                         "min_count": 1,
                         "max_count": 3
                     },
                     "b": {
                         "machine_type": "e2-medium",
-                        "initial_node_count": 2,
+                        "initial_node_count": 1,
                         "min_count": 1,
                         "max_count": 3
                     }
